@@ -5,9 +5,10 @@
    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Welcome!</title>
+  <title>FCI SN Registeration</title>
 </head>
 <body>
+<h1><center>Register to our FCI Social Network</center></h1>
   <form action="/social/response" method="post">
   Name : <input type="text" name="uname" /> <br>
   Email : <input type="text" name="email" /> <br>

@@ -4,10 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Insert title here</title>
+<title>Welcome To FCI SN</title>
 </head>
 <body>
-<a href="/social/signup/">Sign up</a> <br>
-<a href="/social/login/">Login</a> <br>
+<h1><center>Welcome to our FCI Social Network</center></h1>
+<center><a href="/social/signup/">Sign up</a></center> <br>
+<center><a href="/social/login/">Login</a></center> <br>
 </body>
 </html>

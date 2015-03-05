@@ -4,13 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>${it.name} Profile Page</title>
+<title>Join A Group</title>
 </head>
 <body>
-<h1><center>Welcome ${it.name} ! This is Your Home Page. </center></h1>
+<h1><center>Join The Group You Want</center></h1>
+  <form action="/social/JoinGroup" method="post">
+   JoinGroup by ID : <input type="text" name="gpID" /> <br>
+  
 
-<a href="/social/group/">Create Group</a> <br>
-<a href="/social/join/">Join Group</a> <br>
-<a href="/social/logout/">Logout</a> <br>
+  <input type="submit" value="JoinGroup">
+  
+  </form>
+
 </body>
 </html>
