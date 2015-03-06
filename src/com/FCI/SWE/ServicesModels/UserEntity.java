@@ -48,6 +48,10 @@ public class UserEntity {
 		this.password = password;
 	}
 	
+	public UserEntity() {
+		// TODO Auto-generated constructor stub
+	}
+
 	private void setId(long id){
 		this.id = id;
 	}
@@ -122,5 +126,20 @@ public class UserEntity {
 
 		return true;
 
+	}
+	public long getIDbyEmail(String email)
+	{
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("users");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("email").toString().equals(email))
+			{
+				return (entity.getKey().getId());
+			}
+		}
+		return -1;
 	}
 }

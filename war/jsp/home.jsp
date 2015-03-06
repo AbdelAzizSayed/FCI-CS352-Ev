@@ -12,5 +12,7 @@
 <a href="/social/group/">Create Group</a> <br>
 <a href="/social/join/">Join Group</a> <br>
 <a href="/social/logout/">Logout</a> <br>
+<a href="/social/friendPage/">Add Friend</a> <br>
+
 </body>
 </html>
