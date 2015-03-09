@@ -23,7 +23,7 @@ public class GroupController {
 	public Response group() {
 
 		if (User.getCurrentActiveUser() == null) {
-			return Response.serverError().build();
+			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/createGroup")).build();
 	}
@@ -32,16 +32,20 @@ public class GroupController {
 	public Response join() {
 
 		if (User.getCurrentActiveUser() == null) {
-			return Response.serverError().build();
+			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/joinGroup")).build();
 	}
 
 	@POST
 	@Path("/CreateGroup")
-	public String createGroup(@FormParam("name") String name,
+	public Response createGroup(@FormParam("name") String name,
 			@FormParam("desc") String desc, @FormParam("privacy") String privacy) {
-
+		
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
+		
 		String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&name=" + name + "&desc=" + desc + "&privacy=" + privacy;
@@ -53,7 +57,7 @@ public class GroupController {
 			obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
 			if (object.get("Status").equals("OK"))
-				return "Group created Successfully";
+				return Response.ok("Group Created Successfully!").build();
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -64,10 +68,12 @@ public class GroupController {
 	}
 	@POST
 	@Path("/JoinGroup")
-	public String joinGroup(
-			@FormParam("gpID") String gpID) 
+	public Response joinGroup(
+		@FormParam("gpID") String gpID) 
 	{
-
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
 		String serviceUrl = "http://localhost:8888/rest/JoinGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&gpID=" + gpID;
@@ -80,7 +86,7 @@ public class GroupController {
 			obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
 			if (object.get("Status").equals("OK"))
-				return "joinerd group Successfully";
+				return Response.ok("You've joined the group").build();
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

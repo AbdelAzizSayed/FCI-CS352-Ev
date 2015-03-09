@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
+
 <title>${it.name} Profile Page</title>
 </head>
 <body>
@@ -11,8 +12,8 @@
 
 <a href="/social/group/">Create Group</a> <br>
 <a href="/social/join/">Join Group</a> <br>
+<a href="/social/addFriend/">Add Friend</a> <br>
+<a href="/social/friendListAndReq/">Show Friend List And Requests</a> <br>
 <a href="/social/logout/">Logout</a> <br>
-<a href="/social/friendPage/">Add Friend</a> <br>
-
 </body>
 </html>

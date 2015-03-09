@@ -56,6 +56,7 @@ public class GroupEntity {
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
 		Entity group = new Entity("groups", list.size() + 1);
+		
 		group.setProperty("name", this.name);
 		group.setProperty("description", this.description);
 		group.setProperty("privacy", this.privacy);

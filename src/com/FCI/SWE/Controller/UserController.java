@@ -88,7 +88,7 @@ public class UserController {
 	public Response login() {
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
-
+	
 	/**
 	 * Action function to response to signup request, This function will act as
 	 * a controller part and it will calls RegistrationService to make
@@ -105,7 +105,7 @@ public class UserController {
 	@POST
 	@Path("/response")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String response(@FormParam("uname") String uname,
+	public Response response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
 
 		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
@@ -120,18 +120,14 @@ public class UserController {
 			obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
 			if (object.get("Status").equals("OK"))
-				return "Registered Successfully";
+				return Response.ok("Registered Successfuly!").build();
 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		/*
-		 * UserEntity user = new UserEntity(uname, email, pass);
-		 * user.saveUser(); return uname;
-		 */
-		return "Failed";
+		return Response.ok("Registeration Failed !").build();
 	}
 
 	/**

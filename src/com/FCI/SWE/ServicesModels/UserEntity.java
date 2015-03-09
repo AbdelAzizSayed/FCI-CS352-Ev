@@ -48,10 +48,6 @@ public class UserEntity {
 		this.password = password;
 	}
 	
-	public UserEntity() {
-		// TODO Auto-generated constructor stub
-	}
-
 	private void setId(long id){
 		this.id = id;
 	}
@@ -127,19 +123,31 @@ public class UserEntity {
 		return true;
 
 	}
-	public long getIDbyEmail(String email)
-	{
+	/**
+	 * 
+	 * This static method will form UserEntity class using user name and
+	 * password This method will serach for user in datastore
+	 * 
+	 * @param name
+	 *            user name
+	 * @param pass
+	 *            user password
+	 * @return Constructed user entity
+	 */
+
+	public static long getUserIDByEmail(String email) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
+
 		Query gaeQuery = new Query("users");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
-		
 		for (Entity entity : pq.asIterable()) {
 			if (entity.getProperty("email").toString().equals(email))
 			{
-				return (entity.getKey().getId());
+				return entity.getKey().getId();
 			}
 		}
-		return -1;
-	}
+		return -1;//no such a friend
+	}	
+	
 }
