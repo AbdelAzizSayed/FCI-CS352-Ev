@@ -32,6 +32,7 @@ public class GroupServices {
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
+//		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}
 	@POST
@@ -46,6 +47,7 @@ public class GroupServices {
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
+//		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}	
 

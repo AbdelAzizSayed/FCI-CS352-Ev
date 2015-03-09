@@ -25,6 +25,7 @@ public class FriendshipServices {
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
+//		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}	
 	@POST
@@ -37,6 +38,7 @@ public class FriendshipServices {
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
+	//	System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}		
 

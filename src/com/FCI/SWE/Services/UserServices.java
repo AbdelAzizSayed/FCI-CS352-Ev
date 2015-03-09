@@ -42,13 +42,6 @@ import com.FCI.SWE.ServicesModels.UserEntity;
 @Produces(MediaType.TEXT_PLAIN)
 public class UserServices {
 	
-	
-	/*@GET
-	@Path("/index")
-	public Response index() {
-		return Response.ok(new Viewable("/jsp/entryPoint")).build();
-	}*/
-
 
 		/**
 	 * Registration Rest service, this service will be called to make
@@ -70,6 +63,7 @@ public class UserServices {
 		user.saveUser();
 		JSONObject object = new JSONObject();
 		object.put("Status", "OK");
+//		System.out.println(object.toString());
 		return object.toString();
 	}
 
@@ -96,6 +90,7 @@ public class UserServices {
 			object.put("password", user.getPass());
 			object.put("id", user.getId());
 		}
+//System.out.println(object.toString());
 		return object.toString();
 	}
 }
