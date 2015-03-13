@@ -17,7 +17,12 @@ import com.FCI.SWE.Models.User;
 @Path("/")
 @Produces("text/html")
 public class GroupController {
-
+	/**
+	 * Action function to render create group page of application, this page contains a
+	 * form with create a group button and some text fields for inputs 
+	 * 
+	 * @return create group page
+	*/
 	@GET
 	@Path("/group")
 	public Response group() {
@@ -27,6 +32,15 @@ public class GroupController {
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/createGroup")).build();
 	}
+	
+	/**
+	 * Action function to render join group page of application, this page contains a
+	 * form with a button to join a  group and a textfield to take the id of the group as
+	 * input
+	 *
+	 * 
+	 * @return join group page
+	*/	
 	@GET
 	@Path("/join")
 	public Response join() {
@@ -36,7 +50,20 @@ public class GroupController {
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/joinGroup")).build();
 	}
-
+	/**
+	 * a function the calls the create group service
+	 *
+	 * @param userID 
+	 *            the user created the group to be sent to the service
+	 * @param name 
+	 *            the name of the group to be sent to the service 
+	 * @param desc 
+	 *            the description of the group to be sent to the service
+	 * @param privacy 
+	 *            the privacy of the group to be sent to the service
+	 * 			
+	 * @return status of the creation of the group
+	 */	
 	@POST
 	@Path("/CreateGroup")
 	public Response createGroup(@FormParam("name") String name,
@@ -46,7 +73,7 @@ public class GroupController {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		
-		String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/CreateGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&name=" + name + "&desc=" + desc + "&privacy=" + privacy;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
@@ -66,6 +93,13 @@ public class GroupController {
 
 		return null;
 	}
+	/**
+	 * a function the calls the join group service
+	 * @param gpID
+	 * 			the group ID to be passed to the service
+	 * 		 
+	 * @return status of joining a group 
+	 */	
 	@POST
 	@Path("/JoinGroup")
 	public Response joinGroup(
@@ -74,7 +108,7 @@ public class GroupController {
 		if (User.getCurrentActiveUser() == null) {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
-		String serviceUrl = "http://localhost:8888/rest/JoinGroupService";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/JoinGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&gpID=" + gpID;
 		System.out.println("here " + gpID);

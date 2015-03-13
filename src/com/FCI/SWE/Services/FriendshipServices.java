@@ -14,7 +14,13 @@ import com.FCI.SWE.ServicesModels.GroupEntity;
 @Produces(MediaType.TEXT_PLAIN)
 
 public class FriendshipServices {
-	
+	/**
+	 * Send Friend Request is used to send a request to anotehr user
+	 * 
+	 * @param email
+	 *            provide the email of the user to send friend request to 
+	 * @return Status json
+	 */
 	@POST
 	@Path("/sendFriendReq")
 	public String sendFriendReq(@FormParam("email") String email) {
@@ -28,6 +34,13 @@ public class FriendshipServices {
 //		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}	
+	/**
+	 * Accept Friend Request is used to accept a friend request send by another user
+	 * 
+	 * @param friendID
+	 *            provide the friend ID to accept friend request with
+	 * @return Status json
+	 */
 	@POST
 	@Path("/acceptFriendReq")
 	public String acceptFriendReq(@FormParam("friendID") String friendID) {

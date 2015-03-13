@@ -124,17 +124,11 @@ public class UserEntity {
 
 	}
 	/**
-	 * 
-	 * This static method will form UserEntity class using user name and
-	 * password This method will serach for user in datastore
-	 * 
-	 * @param name
-	 *            user name
-	 * @param pass
-	 *            user password
-	 * @return Constructed user entity
+	 * this function takes a user email and returns his ID
+	 * @param email
+	 * 				the email to get the matching ID 
+	 * @return the ID of the user shring this email
 	 */
-
 	public static long getUserIDByEmail(String email) {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();

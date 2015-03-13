@@ -9,10 +9,8 @@
 <body>
 <h1><center>Join The Group You Want</center></h1>
   <form action="/social/JoinGroup" method="post">
-   JoinGroup by ID : <input type="text" name="gpID" /> <br>
-  
-
-  <input type="submit" value="JoinGroup">
+   <center>JoinGroup by ID : <input type="text" name="gpID" /> <br>
+  <input type="submit" value="JoinGroup"></center>
   
   </form>
 

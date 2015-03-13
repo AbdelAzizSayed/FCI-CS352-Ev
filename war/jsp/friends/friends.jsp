@@ -1,3 +1,4 @@
+<img src="<%=request.getContextPath()%>/image/top.jpg" width="1350" height="80"/>
 <%@ page language="java" contentType="text/html; charset=windows-1256"
     pageEncoding="windows-1256"%>
     <%@page import="com.google.appengine.api.datastore.DatastoreService"%>
@@ -11,11 +12,10 @@
     <%@page import="com.FCI.SWE.Models.User"%>
     
    
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
+<html>	
+<head>
+	<link rel="stylesheet" type="text/css" href="css\style.css"><meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
 <title>Friend List</title>
 </head>
 <body>

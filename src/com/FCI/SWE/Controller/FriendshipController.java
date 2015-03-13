@@ -19,6 +19,12 @@ import com.FCI.SWE.Models.User;
 @Produces("text/html")
 public class FriendshipController {
 
+	/**
+	 * Action function to render add friend page of application, this page contains a
+	 * form with add friend button and a text field to take the friend email as an input 
+	 * 
+	 * @return add friend page
+	 */
 	@GET
 	@Path("/addFriend")
 	public Response addFriendPage(){
@@ -28,7 +34,11 @@ public class FriendshipController {
 		}
 		return Response.ok(new Viewable ("/jsp/friends/addFriend")).build();
 	}
-	
+	/**
+	 * Action function to render friends page that contains all friend requests and friend list 
+	 * 
+	 * @return friends page
+	 */	
 	@GET
 	@Path("/friendListAndReq")
 	public Response showList(){
@@ -38,11 +48,17 @@ public class FriendshipController {
 		}
 		return Response.ok(new Viewable ("/jsp/friends/friends")).build();
 	}	
-	
+	/**
+	 * a controller that calls the send friend request service and provides it with the 
+	 * suitable parameters 
+	 * @param email 
+	 * 				the friend email to add
+	 * @return JSON status
+	 */
 	@POST
 	@Path("/sendFriendReq")
 	public Response friendReq (@FormParam("email") String email){
-		String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/sendFriendReq";
 		String urlParameters = "email=" + email;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -60,11 +76,18 @@ public class FriendshipController {
 		}
 		return Response.ok("Error sending friend Request !").build();
 	}
+	/**
+	 * a controller that calls the accept friend request service and provides it with the 
+	 * suitable parameters
+	 * @param friendID
+	 * 				the friend ID to accept his friend request
+	 * @return JSON status
+	 */
 	@GET
 	@Path("/acceptFriendReq/{friendID}")
 	public Response acceptFriendReq(@PathParam("friendID") String friendID)
 	{
-		String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/acceptFriendReq";
 		String urlParameters = "friendID=" + friendID ;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST", "application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser ();

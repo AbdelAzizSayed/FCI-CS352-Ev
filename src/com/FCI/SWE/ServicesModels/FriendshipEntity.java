@@ -13,6 +13,14 @@ import com.google.appengine.api.datastore.Query;
 public class FriendshipEntity {
 
 	boolean isApproved;
+	/**
+	 * 
+	 * 
+	 * @param email
+	 * 				the friend email to be matched with the suitable ID and added to the 
+	 * 				data store 
+	 * @return boolean value 
+	 */
 	public boolean sendFriendReq(String email)
 	{
 		isApproved = false ;
@@ -41,7 +49,13 @@ public class FriendshipEntity {
 			return false ;
 		}
 	}
-	
+	/**
+	 * this function takes a friend ID and accept the friend req. with him by setting the
+	 * is approved flag to true value
+	 * @param friendID
+	 * 					the friendID the user wanna be a friend with
+	 * @return true or false 
+	 */
 	public boolean accpetFriendReq(String friendID)
 	{
 		isApproved = true ;

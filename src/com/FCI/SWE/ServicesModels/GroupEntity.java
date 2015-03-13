@@ -15,7 +15,7 @@ public class GroupEntity {
 	private String description;
 	private String privacy;
 	private long ownerId;
-	
+
 	public String getName(){
 		return name;
 	}
@@ -47,7 +47,11 @@ public class GroupEntity {
 	public void setOwnerId(long id){
 		this.ownerId = id;
 	}
-	
+
+	/**
+	 * this function add a group data to the database 
+	 * @return true or false
+	 */
 	public Boolean saveGroup() {
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -67,6 +71,12 @@ public class GroupEntity {
 		else return false;
 
 	}
+	/**
+	 * this function adds a usre to a specific group using his ID and the group ID
+	 * @param gpID
+	 * 				the group ID to join
+	 * @return true or false
+	 */
 	public Boolean joinGroup(String gpID)
 	{
 		DatastoreService datastore = DatastoreServiceFactory
