@@ -1,5 +1,8 @@
 package com.FCI.SWE.Controller;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,20 +37,7 @@ public class FriendshipController {
 		}
 		return Response.ok(new Viewable ("/jsp/friends/addFriend")).build();
 	}
-	/**
-	 * Action function to render friends page that contains all friend requests and friend list 
-	 * 
-	 * @return friends page
-	 */	
-	@GET
-	@Path("/friendListAndReq")
-	public Response showList(){
-		
-		if (User.getCurrentActiveUser() == null) {
-			return Response.ok(new Viewable("/jsp/error")).build();
-		}
-		return Response.ok(new Viewable ("/jsp/friends/friends")).build();
-	}	
+
 	/**
 	 * a controller that calls the send friend request service and provides it with the 
 	 * suitable parameters 
@@ -58,7 +48,10 @@ public class FriendshipController {
 	@POST
 	@Path("/sendFriendReq")
 	public Response friendReq (@FormParam("email") String email){
-		String serviceUrl = "http://swe2project15.appspot.com/rest/sendFriendReq";
+		
+		
+		//String serviceUrl = "http://swe2project15.appspot.com/rest/sendFriendReq";
+		String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
 		String urlParameters = "email=" + email;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -87,7 +80,8 @@ public class FriendshipController {
 	@Path("/acceptFriendReq/{friendID}")
 	public Response acceptFriendReq(@PathParam("friendID") String friendID)
 	{
-		String serviceUrl = "http://swe2project15.appspot.com/rest/acceptFriendReq";
+		String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
+		//String serviceUrl = "http://swe2project15.appspot.com/rest/acceptFriendReq";
 		String urlParameters = "friendID=" + friendID ;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST", "application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser ();
@@ -105,4 +99,37 @@ public class FriendshipController {
 		}
 		return null;
 	}
+	/**
+	 * Friend List Controller that's used to call the friendList service which returns an
+	 * array list of all the names of the current user's friends and then render the friends page
+	 * @return Response of the friends jsp page 
+	 */
+	@GET
+	@Path("/friendList")
+	@Produces("text/html")
+	public Response FriendList() 
+	{
+		
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
+		String retJson = Connection.connect(
+				//"http://swe2project15.appspot.com/rest/friendList", ""
+				"http://localhost:8888/rest/friendList", ""
+				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+
+		JSONParser parser = new JSONParser();
+		Object obj;
+		try {
+			obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			ArrayList<String> friendList = (ArrayList) object.get("friendList");
+			 return Response.ok(new Viewable ("/jsp/friends/friends",friendList)).build();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }

@@ -1,6 +1,6 @@
 package com.FCI.SWE.Controller;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -25,8 +25,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import sun.org.mozilla.javascript.internal.ast.ForInLoop;
+
 import com.FCI.SWE.Models.User;
+import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
+import com.google.appengine.api.urlfetch.HTTPRequest;
+
 
 /**
  * This class contains REST services, also contains action function for web
@@ -86,9 +91,42 @@ public class UserController {
 	@GET
 	@Path("/login")
 	public Response login() {
+		JSONParser parser = new JSONParser();
+		Object obj;
+		
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
-	
+	/**
+	 * This is an action function that calls the notification service 
+	 * 
+	 * 
+	 */
+	@GET
+	@Path("/notifications")
+	@Produces("text/html")
+	public Response Notifications() {
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();		}
+		
+		String retJson = Connection.connect(
+				
+				//"http://swe2project15.appspot.com/rest/notifications", ""
+				"http://localhost:8888/rest/notifications", ""
+				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+
+		JSONParser parser = new JSONParser();
+		Object obj;
+		try {
+			obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			ArrayList<Map> friendReq = (ArrayList) object.get("reqList");
+			return Response.ok(new Viewable("/jsp/notifications", friendReq)).build();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	/**
 	 * Action function to response to signup request, This function will act as
 	 * a controller part and it will calls RegistrationService to make
@@ -108,7 +146,8 @@ public class UserController {
 	public Response response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
 
-		String serviceUrl = "http://swe2project15.appspot.com/rest/RegistrationService";
+		//String serviceUrl = "http://swe2project15.appspot.com/rest/RegistrationService";
+		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
@@ -150,7 +189,9 @@ public class UserController {
 		String urlParameters = "uname=" + uname + "&password=" + pass;
 
 		String retJson = Connection.connect(
-				"http://swe2project15.appspot.com/rest/LoginService", urlParameters,
+				"http://localhost:8888/rest/LoginService"
+				//"http://swe2project15.appspot.com/rest/LoginService"
+				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();
@@ -171,5 +212,4 @@ public class UserController {
 		}
 		return null;
 	}
-
 }

@@ -14,8 +14,9 @@
 
 <center><a href="/social/group/">Create Group</a> <br>
 <a href="/social/join/">Join Group</a> <br>
+<a href="/social/notifications/">Notifications</a> <br>
 <a href="/social/addFriend/">Add Friend</a> <br>
-<a href="/social/friendListAndReq/">Show Friend List And Requests</a> <br>
+<a href="/social/friendList/">Show Friend List</a> <br>
 <a href="/social/logout/">Logout</a> <br></center>
 </body>
 </html>

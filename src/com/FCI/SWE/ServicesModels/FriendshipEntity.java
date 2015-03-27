@@ -1,6 +1,9 @@
 package com.FCI.SWE.ServicesModels;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.FCI.SWE.Models.User;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -80,8 +83,89 @@ public class FriendshipEntity {
 				{
 					return false ;
 				}
-			}
+			}	
 		}
 		return false ;
+	}
+	/**
+	 * this function is used to get the ids and names of friends in the
+	 * friend request list 
+	 * @return arraylist of map and each map contains user data(name and id)
+	 */
+	public ArrayList<Map> getFriendIDsInReq() 
+	{
+		ArrayList<Map> al = new ArrayList();
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query gaeQuery = new Query("friendship");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		String currentUserID = Long.toString(User.currentActiveUser.getId());
+		
+		for (Entity entity : pq.asIterable()) 
+		{
+			if (entity.getProperty("RecID").toString().equals(currentUserID) &&
+					entity.getProperty("isApproved").toString().equals("false"))
+			{
+				String sendID = entity.getProperty("SendID").toString();
+				gaeQuery = new Query("users");
+			    pq = datastore.prepare(gaeQuery);
+				for (Entity entity2 : pq.asIterable())
+				{
+					if(Long.toString(entity2.getKey().getId()).equals(sendID))
+					{
+						Map friend = new HashMap();
+						friend.put("name",entity2.getProperty("name") );
+						friend.put("id", entity2.getKey().getId());
+						al.add(friend);
+					}
+				}
+			 }
+		}
+		return al ;
+	}
+	/**
+	 * this function is used to get the names if friends in the
+	 * friend request list 
+	 * @return arraylist of string each represents user name
+	 */	
+	public ArrayList<String> getFriendsNameList() 
+	{
+		ArrayList<String> al = new ArrayList();
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query gaeQuery = new Query("friendship");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		String currentUserID = Long.toString(User.currentActiveUser.getId());
+		for (Entity entity : pq.asIterable()) 
+		{
+				if (entity.getProperty("SendID").toString().equals(currentUserID) 
+						&& entity.getProperty("isApproved").toString().equals("true"))
+				{
+					
+					String resID = entity.getProperty("RecID").toString();
+					gaeQuery = new Query("users");
+				    pq = datastore.prepare(gaeQuery);
+					for (Entity entity2 : pq.asIterable())
+					{
+						if(Long.toString(entity2.getKey().getId()).equals(resID))
+						{
+							al.add((String) entity2.getProperty("name"));
+						}
+					}
+				}
+				else if (entity.getProperty("RecID").toString().equals(currentUserID) 
+						&& entity.getProperty("isApproved").toString().equals("true"))
+				{		
+					String sendID = entity.getProperty("SendID").toString();
+					gaeQuery = new Query("users");
+				    pq = datastore.prepare(gaeQuery);
+					for (Entity entity2 : pq.asIterable())
+					{
+						if(Long.toString(entity2.getKey().getId()).equals(sendID))
+						{
+							al.add((String) entity2.getProperty("name"));
+						}
+					}
+				}
+		}
+		return al;
 	}	
 }

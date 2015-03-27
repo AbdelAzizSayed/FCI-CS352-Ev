@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -26,8 +28,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
+import com.google.appengine.api.urlfetch.HTTPRequest;
 
 /**
  * This class contains REST services, also contains action function for web
@@ -84,13 +88,26 @@ public class UserServices {
 			object.put("Status", "Failed");
 
 		} else {
+			
 			object.put("Status", "OK");
 			object.put("name", user.getName());
 			object.put("email", user.getEmail());
 			object.put("password", user.getPass());
 			object.put("id", user.getId());
 		}
-//System.out.println(object.toString());
+		return object.toString();
+	}
+	/**
+	 * here's a notifcation service that gets the friend requests list
+	 * @return String JSON
+	 */
+	@POST
+	@Path("/notifications")
+	public String notifications() {
+		JSONObject object = new JSONObject();
+		FriendshipEntity fe = new FriendshipEntity();
+		ArrayList <Map> friendReq = fe.getFriendIDsInReq();
+		object.put("reqList", friendReq);
 		return object.toString();
 	}
 }

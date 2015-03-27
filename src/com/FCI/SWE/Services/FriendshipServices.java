@@ -1,5 +1,8 @@
 package com.FCI.SWE.Services;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -53,6 +56,20 @@ public class FriendshipServices {
 			json.put("Status", "Failed");
 	//	System.out.println(json.toJSONString());
 		return json.toJSONString();
-	}		
+	}
+	/**
+	 * A Service that gets the list of friends through calling
+	 * an entity function
+	 * @return ArrayList Of Friends Name
+	 */
+	@POST
+	@Path("/friendList")
+	public String friendList() {
+		JSONObject object = new JSONObject();
+		FriendshipEntity fe = new FriendshipEntity();
+		ArrayList <String> friendList = fe.getFriendsNameList();
+		object.put("friendList", friendList);
+		return object.toString();
+	}	
 
 }
