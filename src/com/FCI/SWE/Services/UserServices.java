@@ -28,6 +28,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
@@ -110,4 +111,5 @@ public class UserServices {
 		object.put("reqList", friendReq);
 		return object.toString();
 	}
+
 }
