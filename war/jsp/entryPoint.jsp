@@ -1,18 +1,71 @@
-<img src="<%=request.getContextPath()%>/image/top.jpg" width="1350" height="80"/>
 <%@ page language="java" contentType="text/html; charset=windows-1256"
-    pageEncoding="windows-1256"%> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
-<html>	
+    pageEncoding="windows-1256"%>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<link rel="stylesheet" type="text/css" href="css\style.css">
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1256">
-<title>Welcome To FCI SN</title>
+<title>SocialNet</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<div class="main">
+  <div class="main_resize">
+    <div class="header">
+      <div class="logo">
+        <h1><a href="#"><span>FCI</span>SocialNet<small>SWIIProject</small></a></h1>
+      </div>
 
-<h1><center>Welcome to our FCI Social Network</center></h1>
-<center><a href="/social/signup/">Sign up</a></center> <br>
-<center><a href="/social/login/">Login</a></center> <br>
-</body>
+    <div class="content">
+      <div class="content_bg">
+        <div class="mainbar">
+          <div class="article">
+            <h2><span>Welcome To Our Community !</span></h2>
+            <div class="clr"></div>
+			<br>
+            <img src="/images/images_1.jpg" width="613" height="193" alt="" />
+            <div class="clr"></div>
+          </div>
+        </div>
+        <div class="sidebar">
+          <div class="gadget">
+            <h2 class="star"> Menu</h2>
+            <div class="clr"></div>
+            <ul class="sb_menu">              
+              <center><h3><li><a href="/social/signup/">Register</a></li></h3></center>
+              <center><h3><li><a href="/social/login/">Login</a></li></h3></center>
+            </ul>
+          </div>
+        </div>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>		
+        <div class="clr"></div>
+      </div>
+    </div>
+  </div>
+  <div class="fbg">
+    <div class="fbg_resize">
+      <div class="col c1">
+        <h2><span>Share Your Ideas</span></h2>
+        <a href="#"><img src="<%=request.getContextPath()%>/images/pic_1.jpg" width="58" height="58" alt="" /></a> <a href="#"><img src="/images/pic_2.jpg" width="58" height="58" alt="" /></a> <a href="#"><img src="/images/pic_3.jpg" width="58" height="58" alt="" /></a> <a href="#"><img src="/images/pic_4.jpg" width="58" height="58" alt="" /></a> <a href="#"><img src="/images/pic_5.jpg" width="58" height="58" alt="" /></a> <a href="#"><img src="/images/pic_6.jpg" width="58" height="58" alt="" /></a> </div>
+      <div class="col c2">
+        <h2><span>To our users:</span></h2>
+        <p>We are always interested in your feedbacks, so don't hesitate to send us your feedbacks and suggestions. </p>
+      </div>
+      <div class="col c3">
+        <h2><span>About</span></h2>
+        <p>We are SWII project Team:
+		<br>AbdelAziz Sayed
+		<br>Abdelrahman Mostafa
+		<br>Essam Mohammed Omar</p>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+</div>
+<div class="footer">
+  <div class="footer_resize">
+    <p class="lf">&copy; Copyright <a href="#">FCISocialNet</a>.</p>
+    <p class="rf">Layout by Rocket <a href="http://www.rocketwebsitetemplates.com/">Website Templates</a></p>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center>This template  downloaded form <a href='http://all-free-download.com/free-website-templates/'>free website templates</a></div></body>
 </html>

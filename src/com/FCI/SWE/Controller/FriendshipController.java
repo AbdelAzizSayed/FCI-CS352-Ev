@@ -51,7 +51,7 @@ public class FriendshipController {
 		
 		
 		//String serviceUrl = "http://swe2project15.appspot.com/rest/sendFriendReq";
-		String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/sendFriendReq";
 		String urlParameters = "email=" + email;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -80,7 +80,7 @@ public class FriendshipController {
 	@Path("/acceptFriendReq/{friendID}")
 	public Response acceptFriendReq(@PathParam("friendID") String friendID)
 	{
-		String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/acceptFriendReq";
 		//String serviceUrl = "http://swe2project15.appspot.com/rest/acceptFriendReq";
 		String urlParameters = "friendID=" + friendID ;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST", "application/x-www-form-urlencoded;charset=UTF-8");
@@ -115,7 +115,7 @@ public class FriendshipController {
 		}
 		String retJson = Connection.connect(
 				//"http://swe2project15.appspot.com/rest/friendList", ""
-				"http://localhost:8888/rest/friendList", ""
+				"http://swe2project15.appspot.com/rest/friendList", ""
 				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();

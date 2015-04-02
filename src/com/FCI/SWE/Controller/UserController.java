@@ -111,7 +111,7 @@ public class UserController {
 		String retJson = Connection.connect(
 				
 				//"http://swe2project15.appspot.com/rest/notifications", ""
-				"http://localhost:8888/rest/notifications", ""
+				"http://swe2project15.appspot.com/rest/notifications", ""
 				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();
@@ -147,7 +147,7 @@ public class UserController {
 			@FormParam("email") String email, @FormParam("password") String pass) {
 
 		//String serviceUrl = "http://swe2project15.appspot.com/rest/RegistrationService";
-		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
@@ -189,7 +189,7 @@ public class UserController {
 		String urlParameters = "uname=" + uname + "&password=" + pass;
 
 		String retJson = Connection.connect(
-				"http://localhost:8888/rest/LoginService"
+				"http://swe2project15.appspot.com/rest/LoginService"
 				//"http://swe2project15.appspot.com/rest/LoginService"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");

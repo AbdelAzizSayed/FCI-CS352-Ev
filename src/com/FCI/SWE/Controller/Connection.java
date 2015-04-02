@@ -18,6 +18,7 @@ public class Connection {
 			URL url = new URL(serviceUrl);
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
+			
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			connection.setInstanceFollowRedirects(false);

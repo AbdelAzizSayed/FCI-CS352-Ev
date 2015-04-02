@@ -73,7 +73,7 @@ public class GroupController {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		
-		String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/CreateGroupService";
 		//String serviceUrl = "http://swe2project15.appspot.com/rest/CreateGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&name=" + name + "&desc=" + desc + "&privacy=" + privacy;
@@ -110,7 +110,7 @@ public class GroupController {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		
-		String serviceUrl = "http://localhost:8888/rest/JoinGroupService";
+		String serviceUrl = "http://swe2project15.appspot.com/rest/JoinGroupService";
 		//String serviceUrl = "http://swe2project15.appspot.com/rest/JoinGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&gpID=" + gpID;
