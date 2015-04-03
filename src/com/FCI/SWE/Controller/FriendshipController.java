@@ -47,10 +47,13 @@ public class FriendshipController {
 	 */
 	@POST
 	@Path("/sendFriendReq")
-	public Response friendReq (@FormParam("email") String email){
-		
-		
-		//String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
+	public Response friendReq (@FormParam("email") String email)
+	{
+		//if the field is empty do nothing
+		if(email.equals(""))
+		{
+			return null ;	
+		}
 		String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
 		String urlParameters = "email=" + email;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
@@ -81,7 +84,6 @@ public class FriendshipController {
 	public Response acceptFriendReq(@PathParam("friendID") String friendID)
 	{
 		String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
-		//String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
 		String urlParameters = "friendID=" + friendID ;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST", "application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser ();
@@ -114,7 +116,6 @@ public class FriendshipController {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		String retJson = Connection.connect(
-				//"http://localhost:8888/rest/friendList", ""
 				"http://localhost:8888/rest/friendList", ""
 				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 

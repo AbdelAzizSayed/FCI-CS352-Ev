@@ -91,6 +91,7 @@ public class UserController {
 	@GET
 	@Path("/login")
 	public Response login() {
+		
 		JSONParser parser = new JSONParser();
 		Object obj;
 		
@@ -145,8 +146,12 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
-
-		//String serviceUrl = "http://localhost:8888/rest/RegistrationService";
+		
+		//if the field is empty do nothing
+		if(email.equals("") || pass.equals("") || uname.equals(""))
+		{
+			return null ;	
+		}
 		String serviceUrl = "http://localhost:8888/rest/RegistrationService";
 		String urlParameters = "uname=" + uname + "&email=" + email
 				+ "&password=" + pass;
@@ -185,9 +190,12 @@ public class UserController {
 	@Produces("text/html")
 	public Response home(@FormParam("uname") String uname,
 			@FormParam("password") String pass) {
-		
-		String urlParameters = "uname=" + uname + "&password=" + pass;
 
+		if(pass.equals("") || uname.equals(""))
+		{
+			return null ;	
+		}
+		String urlParameters = "uname=" + uname + "&password=" + pass;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/LoginService"
 				//"http://localhost:8888/rest/LoginService"

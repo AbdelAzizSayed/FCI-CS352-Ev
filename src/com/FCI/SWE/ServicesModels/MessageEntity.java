@@ -10,7 +10,8 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
-public class MessageEntity {
+public class MessageEntity 
+{
 	private long SenderID;
 	private long RecID;
 	private String Mesg;

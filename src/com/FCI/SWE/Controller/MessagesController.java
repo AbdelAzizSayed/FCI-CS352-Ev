@@ -1,6 +1,4 @@
-package com.FCI.SWE.Controller;
-
-
+package com.FCI.SWE.Controller; 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -46,11 +44,14 @@ public class MessagesController {
 	public Response sendMessage(@FormParam("message") String Message,
 			@FormParam("recEmail") String RecEmail) {
 		
-		String urlParameters = "Message=" + Message + "&recEmail=" + RecEmail;
-		System.out.println("sasda");
+		//if there's no message typed do nothing
+		if(Message.equals("")  || RecEmail.equals(""))
+		{
+			return null ;	
+		}
+		String urlParameters = "message=" + Message + "&recEmail=" + RecEmail;
 		String retJson = Connection.connect(
-				"http://localhost:8888/rest/SendMessage"
-				//"http://localhost:8888/rest/LoginService"
+				"http://localhost:8888/rest/sendMessage"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser();
@@ -64,6 +65,6 @@ public class MessagesController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return Response.ok("Message Sent Successfully!").build();
 	}
 }

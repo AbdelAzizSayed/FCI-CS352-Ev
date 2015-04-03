@@ -35,10 +35,13 @@ import com.FCI.SWE.ServicesModels.MessageEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 
+
+@Path("/")
+@Produces(MediaType.TEXT_PLAIN)
 public class MessageServices {
 
 	@POST
-	@Path("/SendMessages")
+	@Path("/sendMessage")
 	public String SendMesg(@FormParam("message") String Messages,
 			@FormParam("recEmail") String Email) {
 		JSONObject object = new JSONObject();
@@ -48,12 +51,10 @@ public class MessageServices {
 		long recID = Rec.getUserIDByEmail(Email);
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
-		
 		if(Mesg.SendMessage(Messages , SenderID,recID))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
-	//	System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}
 

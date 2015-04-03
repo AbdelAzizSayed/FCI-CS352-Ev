@@ -22,11 +22,8 @@ public class FriendEntity {
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 		
-		UserEntity ue = new UserEntity();
-		long idFriend = ue.getIDbyEmail(email);
-		
+		long idFriend = UserEntity.getUserIDByEmail(email);
 		long idUser = User.currentActiveUser.getId();
-		
 		
 		Entity friend = new Entity("friendship" , list.size() + 1);
 		friend.setProperty("userID", idUser);
