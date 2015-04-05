@@ -119,7 +119,7 @@ public class MessagesController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return Response.ok(new Viewable("/jsp/home")).build();
+		return Response.ok(new Viewable("/jsp/GroupMessages")).build();
 	}
 	@POST
 	@Path("/groupMesg")

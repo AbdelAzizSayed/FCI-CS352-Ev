@@ -78,20 +78,15 @@ public class MessageServices {
 		return json.toJSONString();
 	}
 	@POST
-	@Path("/groupMesg")
-	public String SendGroupMesg(@FormParam("message") String message) 
+	@Path("/searchConversation")
+	public String SendGroupMesg(@FormParam("chatName") String chatName)
 	{
 		JSONObject object = new JSONObject();
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
 		
-		/*String [] emails = Emails.split(",");
-		
-		for (int i=0 ; i<emails.length ; i++)
-			System.out.print(emails[i] + " ");*/
-		
-		if(Mesg.createGroupChat(chatName, Emails))
+		if(Mesg.getChatConversation(chatName))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");

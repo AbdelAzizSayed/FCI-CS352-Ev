@@ -26,6 +26,8 @@ public class MessageEntity
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 		
 		Entity groupChatName = new Entity("groupChatID", list.size() + 1);
+		User Sender = User.getCurrentActiveUser();
+		Emails += Sender.getEmail();
 		
 		groupChatName.setProperty("chatName", name);
 		groupChatName.setProperty("Emails", Emails);
@@ -63,5 +65,27 @@ public class MessageEntity
 		{
 			return false ;
 		}
+	}
+	public Boolean getChatConversation(String chatName)
+	{
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+
+		Query gaeQuery = new Query("groupChatID");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		User Sender = User.getCurrentActiveUser();
+		
+		for (Entity entity : pq.asIterable()) 
+		{			
+			String [] emails = entity.getProperty("Emails").toString().split(",");
+			
+			for (int i=0 ; i<emails.length ; i++)			
+				if (entity.getProperty("chatName").toString().equals(chatName) && 
+						emails[i].equals(Sender.getEmail())	)
+				{
+					return true;
+				}
+		}
+		return false;
 	}
 }
