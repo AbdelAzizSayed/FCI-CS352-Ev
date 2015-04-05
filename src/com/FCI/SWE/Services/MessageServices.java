@@ -44,6 +44,7 @@ public class MessageServices {
 	@Path("/sendMessage")
 	public String SendMesg(@FormParam("message") String Messages,
 			@FormParam("recEmail") String Email) {
+		
 		JSONObject object = new JSONObject();
 		User Sender = User.getCurrentActiveUser();
 		long SenderID = Sender.getId();
@@ -57,5 +58,44 @@ public class MessageServices {
 			json.put("Status", "Failed");
 		return json.toJSONString();
 	}
-
+	
+	@POST
+	@Path("/groupMesgEmails")
+	public String createGroupMesg(@FormParam("chatName") String chatName,
+			@FormParam("recEmails") String Emails) 
+	{
+		System.out.println(chatName + " " + Emails);
+		JSONObject object = new JSONObject();
+		
+		MessageEntity Mesg = new MessageEntity() ;
+		JSONObject json = new JSONObject();
+		
+		if(Mesg.createGroupChat(chatName, Emails))
+			json.put("Status", "OK");
+		else
+			json.put("Status", "Failed");
+		
+		return json.toJSONString();
+	}
+	@POST
+	@Path("/groupMesg")
+	public String SendGroupMesg(@FormParam("message") String message) 
+	{
+		JSONObject object = new JSONObject();
+		
+		MessageEntity Mesg = new MessageEntity() ;
+		JSONObject json = new JSONObject();
+		
+		/*String [] emails = Emails.split(",");
+		
+		for (int i=0 ; i<emails.length ; i++)
+			System.out.print(emails[i] + " ");*/
+		
+		if(Mesg.createGroupChat(chatName, Emails))
+			json.put("Status", "OK");
+		else
+			json.put("Status", "Failed");
+		
+		return json.toJSONString();
+	}
 }

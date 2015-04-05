@@ -25,16 +25,15 @@
       <div class="content_bg">
         <div class="mainbar">
           <div class="article">
-
-            <h2><span>Notifications</span></h2>
+            <h2><span>Send Group Message </span></h2>
             <div class="clr"></div>
 			<br>
-				<c:forEach items = "${it}" var="cur" >
-				    <c:out value="${cur.name}"/> added you as a friend
-				    <a href=/social/acceptFriendReq/<c:out value="${cur.id}"/>>Confirm</a><br>
-				</c:forEach>
+			<form action="/social/groupMesgEmails" method="post">
+				Please enter Email addresses of your friends <br><input type="text" name = "recEmails"></input><br><br>
+				Please enter Chat name <br><input type="text" name="chatName"></input><br><br>
+			     <input type = "submit" value="Go to Chat box">
+			</form>
             <div class="clr"></div>
-
           </div>
         </div>
         <div class="sidebar">

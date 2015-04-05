@@ -46,7 +46,7 @@
               <li><a href="/social/group/">Create Group</a></li>
               <li><a href="/social/friendList/">My Friends</a></li>
 			  <li><a href="/social/sendMessage/">Send Message</a></li>
-			  <li><a href="#">Send Group Message</a></li>
+			  <li><a href="/social/sendGroupMessage/">Send Group Message</a></li>
             </ul>
           </div>
         </div>

@@ -25,16 +25,16 @@
       <div class="content_bg">
         <div class="mainbar">
           <div class="article">
-
-            <h2><span>Notifications</span></h2>
+            <h2><span>Send Group Message </span></h2>
             <div class="clr"></div>
 			<br>
-				<c:forEach items = "${it}" var="cur" >
-				    <c:out value="${cur.name}"/> added you as a friend
-				    <a href=/social/acceptFriendReq/<c:out value="${cur.id}"/>>Confirm</a><br>
-				</c:forEach>
+			<form action="/social/groupMesg" method="post">
+				
+				Message :<br> <textarea rows="5" cols="21" name = "message"></textarea><br>
+			    
+			    <input type = "submit" value="Send">
+			</form>
             <div class="clr"></div>
-
           </div>
         </div>
         <div class="sidebar">
@@ -48,7 +48,7 @@
               <li><a href="/social/group/">Create Group</a></li>
               <li><a href="/social/friendList/">My Friends</a></li>
 			  <li><a href="/social/sendMessage/">Send Message</a></li>
-			  <li><a href="/social/sendGroupMessage/">Send Group Message</a></li>
+			  <li><a href=/social/sendGroupMessage/">Send Group Message</a></li>
             </ul>
           </div>
         </div>

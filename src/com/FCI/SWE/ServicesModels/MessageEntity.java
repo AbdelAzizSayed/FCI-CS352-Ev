@@ -17,6 +17,28 @@ public class MessageEntity
 	private String Mesg;
 	private boolean isRead ;
 	
+	public boolean createGroupChat (String name , String Emails)
+	{		
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+		Query gaeQuery = new Query("groupChatName");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
+		
+		Entity groupChatName = new Entity("groupChatID", list.size() + 1);
+		
+		groupChatName.setProperty("chatName", name);
+		groupChatName.setProperty("Emails", Emails);
+		
+		if(datastore.put(groupChatName).isComplete())
+		{
+			return true ;
+		}
+		else
+		{
+			return false ;
+		}
+	}
 	public boolean SendMessage(String Mesg , long Sender , long Rec){
 
 		isRead = false ;

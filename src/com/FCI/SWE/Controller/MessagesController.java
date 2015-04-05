@@ -35,9 +35,11 @@ import com.google.appengine.api.urlfetch.HTTPRequest;
 public class MessagesController {
 	@GET
 	@Path("/sendMessage")
-	public Response sendMesg() {
+	public Response sendMesg() 
+	{
 		return Response.ok(new Viewable("/jsp/Messages")).build();
 	}
+	
 	@POST
 	@Path("/sendMesg")
 	@Produces("text/html")
@@ -52,6 +54,86 @@ public class MessagesController {
 		String urlParameters = "message=" + Message + "&recEmail=" + RecEmail;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/sendMessage"
+				, urlParameters,
+				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+		JSONParser parser = new JSONParser();
+		Object obj;
+		try {
+			obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if (object.get("Status").equals("Failed"))
+				return null;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Response.ok("Message Sent Successfully!").build();
+	}
+	
+	@GET
+	@Path("/sendGroupMessage")
+	public Response sendGroupMessage()
+	{
+		return Response.ok(new Viewable("/jsp/GroupMessages")).build();
+	}
+	
+	@POST
+	@Path("/createMessageBox")
+	public Response createMessageBox()
+	{
+		return Response.ok(new Viewable("/jsp/GroupChatBox")).build();
+	}
+	
+	@POST
+	@Path("/createMessageGroup")
+	public Response createMessageGroup()
+	{
+		return Response.ok(new Viewable("/jsp/createMessageGroup")).build();
+	}
+	
+	@POST
+	@Path("/groupMsgEmails")
+	@Produces("text/html")
+	public Response createGroupMessage(@FormParam("chatName") String chatName,
+			@FormParam("recEmails") String recEmails)
+		{
+			System.out.println(chatName + " " + recEmails);
+		//if there's no message typed do nothing
+		if(chatName.equals("")  || recEmails.equals(""))
+		{
+			return null ;	
+		}
+		String urlParameters = "chatName=" + chatName + "&recEmails=" + recEmails;
+		String retJson = Connection.connect(
+				"http://localhost:8888/rest/groupMesgEmails"
+				, urlParameters,
+				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+		JSONParser parser = new JSONParser();
+		Object obj;
+		try {
+			obj = parser.parse(retJson);
+			JSONObject object = (JSONObject) obj;
+			if (object.get("Status").equals("Failed"))
+				return null;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Response.ok(new Viewable("/jsp/home")).build();
+	}
+	@POST
+	@Path("/groupMesg")
+	@Produces("text/html")
+	public Response sendGroupMessage(@FormParam("message") String message) {
+		
+		//if there's no message typed do nothing
+		if(message.equals(""))
+		{
+			return null ;	
+		}
+		String urlParameters = "message=" + message;
+		String retJson = Connection.connect(
+				"http://localhost:8888/rest/groupMesg"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser();
