@@ -48,6 +48,8 @@ public class UserEntity {
 		this.password = password;
 	}
 	
+	public UserEntity() {}
+
 	private void setId(long id){
 		this.id = id;
 	}
@@ -106,7 +108,8 @@ public class UserEntity {
 	 * 
 	 * @return boolean if user is saved correctly or not
 	 */
-	public Boolean saveUser() {
+	public Boolean saveUser() 
+	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query gaeQuery = new Query("users");

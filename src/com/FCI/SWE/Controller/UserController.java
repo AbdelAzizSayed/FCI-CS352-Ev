@@ -55,19 +55,6 @@ public class UserController {
 	@Path("/signup")
 	public Response signUp() {
 		return Response.ok(new Viewable("/jsp/register")).build();
-	}
-	
-	/**
-	 * Action function to logout by setting the active user to null
-	 * using url like this /rest/logout
-	 * 
-	 * @return entryPoint page
-	 */
-	@GET
-	@Path("/logout")
-	public Response logout() {
-		User.currentActiveUser = null ;
-		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}	
 
 	/**
@@ -78,7 +65,8 @@ public class UserController {
 	 */
 	@GET
 	@Path("/")
-	public Response index() {
+	public Response index() {//used for logout too
+		User.currentActiveUser = null ;
 		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}
 
@@ -91,43 +79,23 @@ public class UserController {
 	@GET
 	@Path("/login")
 	public Response login() {
-		
-		JSONParser parser = new JSONParser();
-		Object obj;
-		
+				
 		return Response.ok(new Viewable("/jsp/login")).build();
 	}
 	/**
-	 * This is an action function that calls the notification service 
+	 * Action function to render tempLogin page that's used for storing the value of
+	 * the user name in a session then call the login service through the home controller
+	 * down below
 	 * 
-	 * 
+	 * @return tempLogin page
 	 */
-	@GET
-	@Path("/notifications")
-	@Produces("text/html")
-	public Response Notifications() {
-		if (User.getCurrentActiveUser() == null) {
-			return Response.ok(new Viewable("/jsp/error")).build();		}
+	/*@POST
+	@Path("/tempLogin")
+	public Response tempLogin(@FormParam) {
 		
-		String retJson = Connection.connect(
-				
-				//"http://localhost:8888/rest/notifications", ""
-				"http://localhost:8888/rest/notifications", ""
-				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+		return Response.ok(new Viewable("/jsp/tempLogin")).build();
+	}	*/
 
-		JSONParser parser = new JSONParser();
-		Object obj;
-		try {
-			obj = parser.parse(retJson);
-			JSONObject object = (JSONObject) obj;
-			ArrayList<Map> friendReq = (ArrayList) object.get("reqList");
-			return Response.ok(new Viewable("/jsp/notifications", friendReq)).build();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 	/**
 	 * Action function to response to signup request, This function will act as
 	 * a controller part and it will calls RegistrationService to make

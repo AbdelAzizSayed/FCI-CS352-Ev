@@ -6,13 +6,21 @@ import java.util.Map;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
 
+import com.FCI.SWE.Models.User;
+import com.FCI.SWE.NotifCommand.AcceptFriendCommand;
+import com.FCI.SWE.NotifCommand.NotifCommnad;
+import com.FCI.SWE.NotifCommand.ReadGroupMessageCommand;
+import com.FCI.SWE.NotifCommand.ReadMessageCommand;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
+import com.FCI.SWE.ServicesModels.MessageEntity;
+import com.FCI.SWE.ServicesModels.UserEntity;
 @Path("/")
 @Produces(MediaType.TEXT_PLAIN)
 
@@ -27,34 +35,23 @@ public class FriendshipServices {
 	@POST
 	@Path("/sendFriendReq")
 	public String sendFriendReq(@FormParam("email") String email) {
-		
-		FriendshipEntity friendship = new FriendshipEntity();
+		String currentUserID = Long.toString(User.currentActiveUser.getId());
+		String friendID = Long.toString(UserEntity.getUserIDByEmail(email));
+		FriendshipEntity friendship = new FriendshipEntity(currentUserID, friendID, false );
 		JSONObject json = new JSONObject();
-		if(friendship.sendFriendReq(email))
+
+		if(friendID.equals("-1"))
+			json.put("Status", "Failed");
+			
+			
+		if(friendship.sendFriendReq())
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
 		return json.toJSONString();
 	}	
-	/**
-	 * Accept Friend Request is used to accept a friend request send by another user
-	 * 
-	 * @param friendID
-	 *            provide the friend ID to accept friend request with
-	 * @return Status json
-	 */
-	@POST
-	@Path("/acceptFriendReq")
-	public String acceptFriendReq(@FormParam("friendID") String friendID) {
-		FriendshipEntity friendship = new FriendshipEntity();
-		JSONObject json = new JSONObject();
-		
-		if(friendship.accpetFriendReq(friendID))
-			json.put("Status", "OK");
-		else
-			json.put("Status", "Failed");
-		return json.toJSONString();
-	}
+
+	
 	/**
 	 * A Service that gets the list of friends through calling
 	 * an entity function

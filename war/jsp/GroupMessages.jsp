@@ -16,11 +16,8 @@
 
       </div>
 	  <div class="logout">
-		<form action="#" method="post">		
-			<input type="image" name="imageField" id="imageField" src="/images/out.png" />		
-		</form>
+			<a href ="/social" ><input type="image" name="imageField" id="imageField" src="/images/out.png" /></a>	
       </div>
-	  
     <div class="content">
       <div class="content_bg">
         <div class="mainbar">
@@ -37,10 +34,13 @@
 			
 			<br> OR <br><br>
 			
-			<form action="/social/groupMesgEmails" method="post">			
+			<form action="/social/groupMesg" method="post">			
 				
-				Enter chat name <br> <input type = "text" name="chatName"></input><br><br>
-				<input type = "submit" value="Go to Chat box">
+				Enter chat name <br> <input type = "text" name="chatName"></input><br>
+			
+				Message :<br> <textarea rows="5" cols="21" name = "message"></textarea><br><br>
+				
+				<input type = "submit" value="Send">
 				
 			</form>
 			
@@ -52,7 +52,7 @@
             <h2 class="star"> Menu</h2>
             <div class="clr"></div>
             <ul class="sb_menu">              
-              <li><a href="/social/notifications/">Notifications</a></li>
+              <li><a href="/social/showNotifications/">Notifications</a></li>
               <li><a href="/social/addFriend/">Add Friend</a></li>
               <li><a href="/social/join/">Join Group</a></li>
               <li><a href="/social/group/">Create Group</a></li>

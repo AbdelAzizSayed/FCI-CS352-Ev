@@ -17,16 +17,13 @@
         <h1><a href="#"><span>FCI</span>SocialNet<small>SWIIProject</small></a></h1>
       </div>
 	  <div class="logout">
-		<form action="#" method="post">		
-			<input type="image" name="imageField" id="imageField" src="/images/out.png" />		
-		</form>
+			<a href ="/social" ><input type="image" name="imageField" id="imageField" src="/images/out.png" /></a>	
       </div>
 	  
     <div class="content">
       <div class="content_bg">
         <div class="mainbar">
           <div class="article">
-			<%= session.getAttribute("loginFlag") %>
             <h2><span>${it.name} ! Welcome To Your Home Page Again !</span></h2>
             <div class="clr"></div>
 			<br>
@@ -40,7 +37,7 @@
             <h2 class="star"> Menu</h2>
             <div class="clr"></div>
             <ul class="sb_menu">              
-              <li><a href="/social/notifications/">Notifications</a></li>
+              <li><a href="/social/showNotifications/">Notifications</a></li>
               <li><a href="/social/addFriend/">Add Friend</a></li>
               <li><a href="/social/join/">Join Group</a></li>
               <li><a href="/social/group/">Create Group</a></li>

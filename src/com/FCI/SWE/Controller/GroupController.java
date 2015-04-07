@@ -74,7 +74,6 @@ public class GroupController {
 		}
 		
 		String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
-		//String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
 		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
 				+ "&name=" + name + "&desc=" + desc + "&privacy=" + privacy;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",

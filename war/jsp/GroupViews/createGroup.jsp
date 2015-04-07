@@ -16,9 +16,7 @@
 
       </div>
 	  <div class="logout">
-		<form action="#" method="post">		
-			<input type="image" name="imageField" id="imageField" src="/images/out.png" />		
-		</form>
+			<a href ="/social" ><input type="image" name="imageField" id="imageField" src="/images/out.png" /></a>	
       </div>
 	  
     <div class="content">
@@ -49,14 +47,13 @@
             <h2 class="star"> Menu</h2>
             <div class="clr"></div>
             <ul class="sb_menu">              
-              <li><a href="/social/notifications/">Notifications</a></li>
+              <li><a href="/social/showNotifications/">Notifications</a></li>
               <li><a href="/social/addFriend/">Add Friend</a></li>
               <li><a href="/social/join/">Join Group</a></li>
               <li><a href="/social/group/">Create Group</a></li>
               <li><a href="/social/friendList/">My Friends</a></li>
-			  <li><a href="/social/sendMessage">Send Message</a></li>
-			  <li><a href="#">Send Group Message</a></li>
-            </ul>
+			  <li><a href="/social/sendMessage/">Send Message</a></li>
+			  <li><a href="/social/sendGroupMessage/">Send Group Message</a></li>            </ul>
           </div>
         </div>
 		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>		

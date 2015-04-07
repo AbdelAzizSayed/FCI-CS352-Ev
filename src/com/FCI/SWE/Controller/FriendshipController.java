@@ -72,35 +72,7 @@ public class FriendshipController {
 		}
 		return Response.ok("Error sending friend Request !").build();
 	}
-	/**
-	 * a controller that calls the accept friend request service and provides it with the 
-	 * suitable parameters
-	 * @param friendID
-	 * 				the friend ID to accept his friend request
-	 * @return JSON status
-	 */
-	@GET
-	@Path("/acceptFriendReq/{friendID}")
-	public Response acceptFriendReq(@PathParam("friendID") String friendID)
-	{
-		String serviceUrl = "http://localhost:8888/rest/acceptFriendReq";
-		String urlParameters = "friendID=" + friendID ;
-		String retJson = Connection.connect(serviceUrl, urlParameters, "POST", "application/x-www-form-urlencoded;charset=UTF-8");
-		JSONParser parser = new JSONParser ();
-		Object obj ;
-		try
-		{
-			obj = parser.parse(retJson);
-			JSONObject object = (JSONObject)obj ;
-			if(object.get("Status").equals("OK"))
-				return Response.ok("Friend Request Confirmed!").build();
-			
-		}catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+
 	/**
 	 * Friend List Controller that's used to call the friendList service which returns an
 	 * array list of all the names of the current user's friends and then render the friends page
@@ -111,7 +83,6 @@ public class FriendshipController {
 	@Produces("text/html")
 	public Response FriendList() 
 	{
-		
 		if (User.getCurrentActiveUser() == null) {
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
@@ -127,10 +98,8 @@ public class FriendshipController {
 			ArrayList<String> friendList = (ArrayList) object.get("friendList");
 			 return Response.ok(new Viewable ("/jsp/friends/friends",friendList)).build();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
 }

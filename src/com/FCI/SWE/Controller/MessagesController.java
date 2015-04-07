@@ -36,7 +36,10 @@ public class MessagesController {
 	@GET
 	@Path("/sendMessage")
 	public Response sendMesg() 
-	{
+	{		
+		if (User.getCurrentActiveUser() == null) {
+				return Response.ok(new Viewable("/jsp/error")).build();
+	}
 		return Response.ok(new Viewable("/jsp/Messages")).build();
 	}
 	
@@ -74,20 +77,19 @@ public class MessagesController {
 	@Path("/sendGroupMessage")
 	public Response sendGroupMessage()
 	{
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}		
 		return Response.ok(new Viewable("/jsp/GroupMessages")).build();
-	}
-	
-	@POST
-	@Path("/createMessageBox")
-	public Response createMessageBox()
-	{
-		return Response.ok(new Viewable("/jsp/GroupChatBox")).build();
 	}
 	
 	@POST
 	@Path("/createMessageGroup")
 	public Response createMessageGroup()
 	{
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}		
 		return Response.ok(new Viewable("/jsp/createMessageGroup")).build();
 	}
 	
@@ -97,12 +99,14 @@ public class MessagesController {
 	public Response createGroupMessage(@FormParam("chatName") String chatName,
 			@FormParam("recEmails") String recEmails)
 		{
-			System.out.println(chatName + " " + recEmails);
+			if (User.getCurrentActiveUser() == null) {
+				return Response.ok(new Viewable("/jsp/error")).build();
+			}		
 		//if there's no message typed do nothing
-		if(chatName.equals("")  || recEmails.equals(""))
-		{
-			return null ;	
-		}
+			if(chatName.equals("")  || recEmails.equals(""))
+			{
+				return null ;	
+			}
 		String urlParameters = "chatName=" + chatName + "&recEmails=" + recEmails;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/groupMesgEmails"
@@ -121,17 +125,22 @@ public class MessagesController {
 		}
 		return Response.ok(new Viewable("/jsp/GroupMessages")).build();
 	}
+	
 	@POST
 	@Path("/groupMesg")
 	@Produces("text/html")
-	public Response sendGroupMessage(@FormParam("message") String message) {
-		
+	public Response sendGroupMessage(@FormParam("message") String message,
+			@FormParam("chatName") String chatName) 
+	{		
 		//if there's no message typed do nothing
-		if(message.equals(""))
+		if(message.equals("") || chatName.equals(""))
 		{
 			return null ;	
 		}
-		String urlParameters = "message=" + message;
+		if (User.getCurrentActiveUser() == null) {
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}		
+		String urlParameters = "message=" + message + "&chatName=" + chatName;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/groupMesg"
 				, urlParameters,

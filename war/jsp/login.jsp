@@ -40,8 +40,7 @@
                   <br>Password:<br>
                   <input type = "password" name="password" />				  
 				  <br><br><input type="submit" value = "Log in">
-				</form>
-				<%session.setAttribute("loginFlag", request.getAttribute("uname")); %> 
+				</form> 
                 </li>              
             </ul>
           </div>

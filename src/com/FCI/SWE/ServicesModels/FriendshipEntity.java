@@ -16,6 +16,22 @@ import com.google.appengine.api.datastore.Query;
 public class FriendshipEntity {
 
 	boolean isApproved;
+	String currentUserID;
+	String friendID;
+	String friendshipID;
+	
+
+	public FriendshipEntity(){}
+	public FriendshipEntity(String friendshipID) 
+	{
+		this.friendshipID = friendshipID ;
+	}
+	public FriendshipEntity(String currentUserID , String friendID , boolean isApproved)
+	{
+		this.currentUserID = currentUserID ;
+		this.friendID = friendID ;
+		this.isApproved = isApproved ;
+	}
 	/**
 	 * 
 	 * 
@@ -24,23 +40,17 @@ public class FriendshipEntity {
 	 * 				data store 
 	 * @return boolean value 
 	 */
-	public boolean sendFriendReq(String email)
+	public boolean sendFriendReq()
 	{
-		isApproved = false ;
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query gaeQuery = new Query("friendship");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 
-		Entity friendship = new Entity("friendship", list.size() + 1);
-		
-		long ResID = UserEntity.getUserIDByEmail(email);
-		if(ResID == -1)
-			return false ;
-		
-		friendship.setProperty("SendID",User.getCurrentActiveUser().getId());
-		friendship.setProperty("RecID", ResID);
+		Entity friendship = new Entity("friendship", list.size() + 1);		
+		friendship.setProperty("SendID",currentUserID);
+		friendship.setProperty("RecID", friendID);
 		friendship.setProperty("isApproved", isApproved);
 		
 		if(datastore.put(friendship).isComplete())
@@ -59,22 +69,17 @@ public class FriendshipEntity {
 	 * 					the friendID the user wanna be a friend with
 	 * @return true or false 
 	 */
-	public boolean accpetFriendReq(String friendID)
+	public boolean accpetFriendReq()
 	{
-		isApproved = true ;
-		System.out.println(friendID);
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
-		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();// connect to DB
 		Query gaeQuery = new Query("friendship");// defining the Query
 		PreparedQuery pq = datastore.prepare(gaeQuery);// excuting the query
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (entity.getProperty("RecID").toString().equals(currentUserID) && 
-					entity.getProperty("SendID").toString().equals(friendID))
+			if (Long.toString(entity.getKey().getId()).equals(friendshipID))
 			{
-				entity.setProperty("isApproved", isApproved);//set the approving flag to true
+				entity.setProperty("isApproved", true);//set the approving flag to true
 				if(datastore.put(entity).isComplete())
 				{
 					return true ;
@@ -114,7 +119,7 @@ public class FriendshipEntity {
 					{
 						Map friend = new HashMap();
 						friend.put("name",entity2.getProperty("name") );
-						friend.put("id", entity2.getKey().getId());
+						friend.put("id", entity.getKey().getId());//the id the friendship record
 						al.add(friend);
 					}
 				}

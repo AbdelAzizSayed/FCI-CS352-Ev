@@ -31,6 +31,7 @@ import org.json.simple.parser.ParseException;
 import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
+import com.FCI.SWE.ServicesModels.MessageEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 
@@ -96,19 +97,6 @@ public class UserServices {
 			object.put("password", user.getPass());
 			object.put("id", user.getId());
 		}
-		return object.toString();
-	}
-	/**
-	 * here's a notifcation service that gets the friend requests list
-	 * @return String JSON
-	 */
-	@POST
-	@Path("/notifications")
-	public String notifications() {
-		JSONObject object = new JSONObject();
-		FriendshipEntity fe = new FriendshipEntity();
-		ArrayList <Map> friendReq = fe.getFriendIDsInReq();
-		object.put("reqList", friendReq);
 		return object.toString();
 	}
 

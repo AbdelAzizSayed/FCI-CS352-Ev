@@ -16,9 +16,7 @@
 
       </div>
 	  <div class="logout">
-		<form action="#" method="post">		
-			<input type="image" name="imageField" id="imageField" src="/images/out.png" />		
-		</form>
+			<a href ="/social" ><input type="image" name="imageField" id="imageField" src="/images/out.png" /></a>	
       </div>
 	  
     <div class="content">
@@ -29,10 +27,18 @@
             <h2><span>Notifications</span></h2>
             <div class="clr"></div>
 			<br>
-				<c:forEach items = "${it}" var="cur" >
-				    <c:out value="${cur.name}"/> added you as a friend
-				    <a href=/social/acceptFriendReq/<c:out value="${cur.id}"/>>Confirm</a><br>
+				<c:forEach items = "${it.friendReq}" var="cur2" >
+			    	<c:out value="${cur2.name}"/> added you as a friend
+			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/1"/>>Confirm</a><br>
 				</c:forEach>
+				<c:forEach items = "${it.messages}" var="cur2" >
+			    	<c:out value="${cur2.name}"/> sent you a message
+			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/2"/>>Read</a><br>
+				</c:forEach>
+				<c:forEach items = "${it.groupMessages}" var="cur2" >
+			    	<c:out value="${cur2.senderName}"/> sent you a group message in group <c:out value="${cur2.chatName}"/>
+			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/3"/>>Read</a><br>
+				</c:forEach>				
             <div class="clr"></div>
 
           </div>
@@ -42,7 +48,7 @@
             <h2 class="star"> Menu</h2>
             <div class="clr"></div>
             <ul class="sb_menu">              
-              <li><a href="/social/notifications/">Notifications</a></li>
+              <li><a href="/social/showNotifications/">Notifications</a></li>
               <li><a href="/social/addFriend/">Add Friend</a></li>
               <li><a href="/social/join/">Join Group</a></li>
               <li><a href="/social/group/">Create Group</a></li>

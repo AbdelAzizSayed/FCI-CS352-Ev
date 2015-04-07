@@ -31,6 +31,7 @@ import org.json.simple.parser.ParseException;
 import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
+import com.FCI.SWE.ServicesModels.GroupMessageEntity;
 import com.FCI.SWE.ServicesModels.MessageEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
@@ -42,17 +43,18 @@ public class MessageServices {
 
 	@POST
 	@Path("/sendMessage")
-	public String SendMesg(@FormParam("message") String Messages,
+	public String SendMesg(@FormParam("message") String Message,
 			@FormParam("recEmail") String Email) {
 		
 		JSONObject object = new JSONObject();
 		User Sender = User.getCurrentActiveUser();
-		long SenderID = Sender.getId();
-		UserEntity Rec = null;
-		long recID = Rec.getUserIDByEmail(Email);
-		MessageEntity Mesg = new MessageEntity() ;
+		String SenderID = Long.toString(Sender.getId());
+		UserEntity Rec = new UserEntity();
+		String recID = Long.toString(Rec.getUserIDByEmail(Email));
+		MessageEntity Mesg = new MessageEntity(SenderID, recID, Message, false) ;
+		
 		JSONObject json = new JSONObject();
-		if(Mesg.SendMessage(Messages , SenderID,recID))
+		if(Mesg.SendMessage())
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
@@ -69,8 +71,8 @@ public class MessageServices {
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
-		
-		if(Mesg.createGroupChat(chatName, Emails))
+		GroupMessageEntity gme = new GroupMessageEntity();
+		if(gme.createGroupChat(chatName, Emails))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
@@ -78,19 +80,22 @@ public class MessageServices {
 		return json.toJSONString();
 	}
 	@POST
-	@Path("/searchConversation")
-	public String SendGroupMesg(@FormParam("chatName") String chatName)
+	@Path("/groupMesg")
+	public String sendGroupMessage(@FormParam("message") String message,
+			@FormParam("chatName") String chatName)
 	{
 		JSONObject object = new JSONObject();
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
-		
-		if(Mesg.getChatConversation(chatName))
+		GroupMessageEntity gme = new GroupMessageEntity();
+		if(gme.sendGroupMessage(chatName , message))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
 		
 		return json.toJSONString();
+		
+		
 	}
 }
