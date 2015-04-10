@@ -16,10 +16,9 @@ import com.google.appengine.api.datastore.Query;
 
 public class GroupMessageEntity 
 {
-	private String SenderID;
-	private String RecID;
+	private String chatName;
 	private String Mesg;
-	private boolean isRead ;
+
 	private String groupMessageID ;
 	
 	public GroupMessageEntity() {}
@@ -31,12 +30,10 @@ public class GroupMessageEntity
 	{
 		return Mesg ;
 	}
-	public GroupMessageEntity(String SenderID, String RecID, String Mesg, boolean isRead)
+	public GroupMessageEntity(String chatName, String Mesg)
 	{
-		this.SenderID = SenderID ;
-		this.RecID = RecID ;
+		this.chatName = chatName ;
 		this.Mesg = Mesg ;
-		this.isRead = isRead ;
 	}
 	/**
 	 * this function takes a chatName and returns its ID
@@ -44,7 +41,7 @@ public class GroupMessageEntity
 	 * 				the chatName to get the matching ID 
 	 * @return the ID of the chatName shring this name
 	 */
-	public boolean sendGroupMessage(String chatName , String message)
+	public boolean sendGroupMessage()
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -78,7 +75,7 @@ public class GroupMessageEntity
 		Entity messages = new Entity("groupMessages");//the id in db will be random number
 		messages.setProperty("chatName" , chatName);
 		messages.setProperty("SendEmail" , sender);		
-		messages.setProperty("Mesg", message);
+		messages.setProperty("Mesg", Mesg);
 		datastore.put(messages);
 		
 		String groupMesgId = Long.toString(messages.getKey().getId()); 
@@ -86,7 +83,6 @@ public class GroupMessageEntity
 		Scanner s = new Scanner(Emails);
 		s.useDelimiter(",");
 		gaeQuery = new Query("notifications");
-		isRead = false; 
 		
 		while (s.hasNext())
 		{
@@ -96,8 +92,7 @@ public class GroupMessageEntity
 			messages = new Entity("notifications");//the id in db will be random number
 			messages.setProperty("notiClass" , "ReadGroupMessageCommand"); //name of class to handle reaction
 			messages.setProperty("notifID", groupMesgId);//groupmessageID
-			messages.setProperty("RecEmail" , RecEmail);
-			messages.setProperty("flag" , isRead);			
+			messages.setProperty("RecEmail" , RecEmail);			
 
 			datastore.put(messages);
 		}
@@ -145,8 +140,7 @@ public class GroupMessageEntity
 			
 			if (entity.getProperty("notifID").equals(groupMessageID) && entity.getProperty("RecEmail").equals(User.getCurrentActiveUser().getEmail()))
 			{
-				entity.setProperty("flag", true);//set the approving flag to true
-				datastore.put(entity);
+				datastore.delete(entity.getKey());//delete notification
 				break ;
 			}	
 		}
@@ -157,7 +151,6 @@ public class GroupMessageEntity
 			if(Long.toString(entity2.getKey().getId()).equals(groupMessageID))
 			{
 				this.Mesg = (String)entity2.getProperty("Mesg");
-				System.out.println(this.Mesg);
 				break;
 			}
 		}

@@ -88,8 +88,8 @@ public class MessageServices {
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
-		GroupMessageEntity gme = new GroupMessageEntity();
-		if(gme.sendGroupMessage(chatName , message))
+		GroupMessageEntity gme = new GroupMessageEntity(chatName , message);
+		if(gme.sendGroupMessage())
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");

@@ -32,8 +32,7 @@ public class NotificationEntity
 				String href = "" ;//to call the action controller form the page
 				
 				//Notification of groupMessages
-			    if(((String)entity.getProperty("notiClass")).equals("ReadGroupMessageCommand")
-			    		&& (boolean)entity.getProperty("flag") == false)
+			    if(((String)entity.getProperty("notiClass")).equals("ReadGroupMessageCommand"))
 			    {
 			
 			    	notID = (String)entity.getProperty("notifID");//messageGroupID in this case
