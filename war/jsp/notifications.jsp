@@ -27,17 +27,9 @@
             <h2><span>Notifications</span></h2>
             <div class="clr"></div>
 			<br>
-				<c:forEach items = "${it.friendReq}" var="cur2" >
-			    	<c:out value="${cur2.name}"/> added you as a friend
-			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/1"/>>Confirm</a><br>
-				</c:forEach>
-				<c:forEach items = "${it.messages}" var="cur2" >
-			    	<c:out value="${cur2.name}"/> sent you a message
-			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/2"/>>Read</a><br>
-				</c:forEach>
-				<c:forEach items = "${it.groupMessages}" var="cur2" >
-			    	<c:out value="${cur2.senderName}"/> sent you a group message in group <c:out value="${cur2.chatName}"/>
-			    		<a href=/social/notificationReaction/<c:out value="${cur2.id}/3"/>>Read</a><br>
+				<c:forEach items = "${it}" var="iter" >
+			    	<c:out value="${iter.NotificationMessageOnPage}"/>
+			    		<a href=<c:out value="${iter.href}"/>><c:out value="${iter.action}"/></a><br>
 				</c:forEach>				
             <div class="clr"></div>
 

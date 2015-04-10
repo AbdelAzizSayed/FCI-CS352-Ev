@@ -1,5 +1,6 @@
 package com.FCI.SWE.Controller;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -64,7 +65,7 @@ public class NotificationController
 		try {
 			obj = parser.parse(retJson);
 			JSONObject object = (JSONObject) obj;
-			Map notifications = (Map)object.get("notifications");
+			ArrayList <Map> notifications = (ArrayList <Map>)object.get("notifications");
 			return Response.ok(new Viewable("/jsp/notifications", notifications)).build();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

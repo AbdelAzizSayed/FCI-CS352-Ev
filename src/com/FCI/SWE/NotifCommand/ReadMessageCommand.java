@@ -5,10 +5,10 @@ import com.FCI.SWE.ServicesModels.MessageEntity;
 
 public class ReadMessageCommand implements NotifCommnad {
 
-	MessageEntity me = new MessageEntity();
-	public ReadMessageCommand(MessageEntity me) 
+	MessageEntity me;
+	public ReadMessageCommand(String netID) 
 	{
-		this.me = me ;
+		me = new MessageEntity(netID);
 	}
 
 	@Override

@@ -36,7 +36,7 @@
                   <br>Email:<br>
                   <input  name="email" class="text" />				  
                   <br>Password:<br>
-                  <input  type = "password" name="passowrd" />				  
+                  <input  type = "password" name="password" />				  
 				  <br><br><input type="submit" value = "Sign up">
 				</form> 				  
                 </li>              

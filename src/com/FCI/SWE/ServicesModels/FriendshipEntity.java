@@ -15,22 +15,19 @@ import com.google.appengine.api.datastore.Query;
 
 public class FriendshipEntity {
 
-	boolean isApproved;
-	String currentUserID;
-	String friendID;
-	String friendshipID;
+	String currentUserEmail;
+	String friendEmail;
 	
 
 	public FriendshipEntity(){}
-	public FriendshipEntity(String friendshipID) 
+	public FriendshipEntity(String friendEmail) 
 	{
-		this.friendshipID = friendshipID ;
+		this.friendEmail = friendEmail ;
 	}
-	public FriendshipEntity(String currentUserID , String friendID , boolean isApproved)
+	public FriendshipEntity(String currentUserEmail , String friendEmail )
 	{
-		this.currentUserID = currentUserID ;
-		this.friendID = friendID ;
-		this.isApproved = isApproved ;
+		this.currentUserEmail = currentUserEmail ;
+		this.friendEmail = friendEmail ;
 	}
 	/**
 	 * 
@@ -44,14 +41,10 @@ public class FriendshipEntity {
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query("friendship");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-
-		Entity friendship = new Entity("friendship", list.size() + 1);		
-		friendship.setProperty("SendID",currentUserID);
-		friendship.setProperty("RecID", friendID);
-		friendship.setProperty("isApproved", isApproved);
+		Entity friendship = new Entity("notifications");//the id in db will be a random number
+		friendship.setProperty("notiClass" , "AcceptFriendCommand"); //name of class to handle reaction
+		friendship.setProperty("notifID", currentUserEmail);
+		friendship.setProperty("RecEmail" ,friendEmail );//friendEmail
 		
 		if(datastore.put(friendship).isComplete())
 		{
@@ -73,59 +66,23 @@ public class FriendshipEntity {
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();// connect to DB
-		Query gaeQuery = new Query("friendship");// defining the Query
-		PreparedQuery pq = datastore.prepare(gaeQuery);// excuting the query
-		for (Entity entity : pq.asIterable()) 
-		{
-			if (Long.toString(entity.getKey().getId()).equals(friendshipID))
+			Entity entity = new Entity("friendship");
+			entity.setProperty("SendEmail", friendEmail);
+			entity.setProperty("RecEmail", User.currentActiveUser.getEmail());
+			datastore.put(entity);
+			datastore = DatastoreServiceFactory.getDatastoreService();
+			Query gaeQuery = new Query("notifications");
+			PreparedQuery pq = datastore.prepare(gaeQuery);
+			for (Entity entity2 : pq.asIterable())
 			{
-				entity.setProperty("isApproved", true);//set the approving flag to true
-				if(datastore.put(entity).isComplete())
+				if (entity2.getProperty("RecEmail").toString().equals(User.currentActiveUser.getEmail())
+						&& entity2.getProperty("notifID").toString().equals(friendEmail) )
 				{
-					return true ;
+					datastore.delete(entity2.getKey());
 				}
-				else
-				{
-					return false ;
-				}
-			}	
-		}
-		return false ;
-	}
-	/**
-	 * this function is used to get the ids and names of friends in the
-	 * friend request list 
-	 * @return arraylist of map and each map contains user data(name and id)
-	 */
-	public ArrayList<Map> getFriendIDsInReq() 
-	{
-		ArrayList<Map> al = new ArrayList();
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query gaeQuery = new Query("friendship");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
-		
-		for (Entity entity : pq.asIterable()) 
-		{
-			if (entity.getProperty("RecID").toString().equals(currentUserID) &&
-					entity.getProperty("isApproved").toString().equals("false"))
-			{
-				String sendID = entity.getProperty("SendID").toString();
-				gaeQuery = new Query("users");
-			    pq = datastore.prepare(gaeQuery);
-				for (Entity entity2 : pq.asIterable())
-				{
-					if(Long.toString(entity2.getKey().getId()).equals(sendID))
-					{
-						Map friend = new HashMap();
-						friend.put("name",entity2.getProperty("name") );
-						friend.put("id", entity.getKey().getId());//the id the friendship record
-						al.add(friend);
-					}
-				}
-			 }
-		}
-		return al ;
+			}
+			return true ;
+
 	}
 	/**
 	 * this function is used to get the names if friends in the
@@ -138,33 +95,26 @@ public class FriendshipEntity {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query gaeQuery = new Query("friendship");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
+		String currentUserEmail = User.currentActiveUser.getEmail();
 		for (Entity entity : pq.asIterable()) 
 		{
-				if (entity.getProperty("SendID").toString().equals(currentUserID) 
-						&& entity.getProperty("isApproved").toString().equals("true"))
+				if (entity.getProperty("SendEmail").toString().equals(currentUserEmail) 
+					||	entity.getProperty("RecEmail").toString().equals(currentUserEmail) )
 				{
 					
-					String resID = entity.getProperty("RecID").toString();
+					String SenderEmail = entity.getProperty("SendEmail").toString();
+					String RecEmail = entity.getProperty("RecEmail").toString();
 					gaeQuery = new Query("users");
 				    pq = datastore.prepare(gaeQuery);
 					for (Entity entity2 : pq.asIterable())
 					{
-						if(Long.toString(entity2.getKey().getId()).equals(resID))
+						if (entity.getProperty("SendEmail").toString().equals(currentUserEmail) 
+								&&(entity2.getProperty("email").toString().equals(RecEmail)))
 						{
 							al.add((String) entity2.getProperty("name"));
 						}
-					}
-				}
-				else if (entity.getProperty("RecID").toString().equals(currentUserID) 
-						&& entity.getProperty("isApproved").toString().equals("true"))
-				{		
-					String sendID = entity.getProperty("SendID").toString();
-					gaeQuery = new Query("users");
-				    pq = datastore.prepare(gaeQuery);
-					for (Entity entity2 : pq.asIterable())
-					{
-						if(Long.toString(entity2.getKey().getId()).equals(sendID))
+						else if (entity2.getProperty("email").toString().equals(SenderEmail) 
+								&&(entity.getProperty("RecEmail").toString().equals(currentUserEmail)))
 						{
 							al.add((String) entity2.getProperty("name"));
 						}

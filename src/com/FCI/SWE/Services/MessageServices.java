@@ -44,14 +44,14 @@ public class MessageServices {
 	@POST
 	@Path("/sendMessage")
 	public String SendMesg(@FormParam("message") String Message,
-			@FormParam("recEmail") String Email) {
+			@FormParam("recEmail") String recEmail) {
 		
 		JSONObject object = new JSONObject();
 		User Sender = User.getCurrentActiveUser();
-		String SenderID = Long.toString(Sender.getId());
+		String SenderEmail = Sender.getEmail();
 		UserEntity Rec = new UserEntity();
-		String recID = Long.toString(Rec.getUserIDByEmail(Email));
-		MessageEntity Mesg = new MessageEntity(SenderID, recID, Message, false) ;
+
+		MessageEntity Mesg = new MessageEntity(SenderEmail, recEmail, Message) ;
 		
 		JSONObject json = new JSONObject();
 		if(Mesg.SendMessage())
@@ -95,7 +95,5 @@ public class MessageServices {
 			json.put("Status", "Failed");
 		
 		return json.toJSONString();
-		
-		
 	}
 }

@@ -6,10 +6,10 @@ import com.FCI.SWE.ServicesModels.GroupMessageEntity;
 
 public class ReadGroupMessageCommand implements NotifCommnad {
 
-	GroupMessageEntity me = new GroupMessageEntity();
-	public ReadGroupMessageCommand(GroupMessageEntity me) 
+	private GroupMessageEntity me ;
+	public ReadGroupMessageCommand(String notID) 
 	{
-		this.me = me ;
+		me = new GroupMessageEntity(notID); 
 	}
 
 	@Override

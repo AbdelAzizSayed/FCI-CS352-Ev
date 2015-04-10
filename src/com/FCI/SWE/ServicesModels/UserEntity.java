@@ -112,11 +112,7 @@ public class UserEntity {
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query("users");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-
-		Entity employee = new Entity("users", list.size() + 1);
+		Entity employee = new Entity("users");
 
 		employee.setProperty("name", this.name);
 		employee.setProperty("email", this.email);
@@ -145,6 +141,26 @@ public class UserEntity {
 			}
 		}
 		return -1;//no such a friend
-	}	
+	}
+	/**
+	 * this function takes a user email and returns his ID
+	 * @param email
+	 * 				the email to get the matching ID 
+	 * @return the ID of the user shring this email
+	 */
+	public static String getUserNameByEmail(String email) {
+		DatastoreService datastore = DatastoreServiceFactory
+				.getDatastoreService();
+
+		Query gaeQuery = new Query("users");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) {
+			if (entity.getProperty("email").toString().equals(email))
+			{
+				return (String)entity.getProperty("name");
+			}
+		}
+		return null;//no such a friend
+	}		
 	
 }

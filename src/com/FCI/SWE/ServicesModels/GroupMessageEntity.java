@@ -38,11 +38,17 @@ public class GroupMessageEntity
 		this.Mesg = Mesg ;
 		this.isRead = isRead ;
 	}
+	/**
+	 * this function takes a chatName and returns its ID
+	 * @param chatName
+	 * 				the chatName to get the matching ID 
+	 * @return the ID of the chatName shring this name
+	 */
 	public boolean sendGroupMessage(String chatName , String message)
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query("groupChatNames");
+		Query gaeQuery = new Query("messageGroups");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 		String Emails="";
@@ -50,7 +56,7 @@ public class GroupMessageEntity
  
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (((String)entity.getProperty("chatName")).equals(chatName))
+			if (((String)entity.getProperty("chatName")).equals(chatName))//making sure there's such a group
 			{				
 				Emails = (String) entity.getProperty("Emails");
 				check = true;
@@ -61,55 +67,58 @@ public class GroupMessageEntity
 			return false;
  
 		User Sender = User.getCurrentActiveUser();
-		String sender = Sender.getEmail();
- 
-		isRead = false; 
-		Scanner s = new Scanner(Emails);
- 
-		s.useDelimiter(",");
+		String sender = Sender.getEmail(); 
+		
 		datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		gaeQuery = new Query("groupMessages");
 		pq = datastore.prepare(gaeQuery);		
 		List<Entity> list2 = pq.asList(FetchOptions.Builder.withDefaults());
-		int i = list2.size();
+	
+		Entity messages = new Entity("groupMessages");//the id in db will be random number
+		messages.setProperty("chatName" , chatName);
+		messages.setProperty("SendEmail" , sender);		
+		messages.setProperty("Mesg", message);
+		datastore.put(messages);
+		
+		String groupMesgId = Long.toString(messages.getKey().getId()); 
+		
+		Scanner s = new Scanner(Emails);
+		s.useDelimiter(",");
+		gaeQuery = new Query("notifications");
+		isRead = false; 
+		
 		while (s.hasNext())
 		{
 			String RecEmail = s.next();
 			if(RecEmail.equals(sender))
-				break ;
-			i++;
-			datastore = DatastoreServiceFactory
-					.getDatastoreService();
-			gaeQuery = new Query("groupMessages");
-			pq = datastore.prepare(gaeQuery);
- 
-			Entity messages = new Entity("groupMessages", i);
-			messages.setProperty("chatName" , chatName);
-			messages.setProperty("SendEmail" , sender);		
+				continue ;
+			messages = new Entity("notifications");//the id in db will be random number
+			messages.setProperty("notiClass" , "ReadGroupMessageCommand"); //name of class to handle reaction
+			messages.setProperty("notifID", groupMesgId);//groupmessageID
 			messages.setProperty("RecEmail" , RecEmail);
-			messages.setProperty("Mesg", message);
-			messages.setProperty("isRead", isRead);
+			messages.setProperty("flag" , isRead);			
+
 			datastore.put(messages);
 		}
 		return true ;
 	}
-	public boolean createGroupChat (String name , String Emails)
+	public boolean createGroupChat (String name , String Emails)//finished
 	{		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query("groupChatNames");
+		Query gaeQuery = new Query("messageGroups");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
 		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
 		
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (entity.getProperty("chatName").equals(name))
+			if (entity.getProperty("chatName").equals(name))//exists before
 			{
 				return false;
 			}	
 		}		
-		Entity groupChatName = new Entity("groupChatNames", list.size() + 1);
+		Entity groupChatName = new Entity("messageGroups");//the id in db will be random number
 		User Sender = User.getCurrentActiveUser();
 		Emails += "," + Sender.getEmail();
 		
@@ -126,62 +135,32 @@ public class GroupMessageEntity
 		}
 	}
 	public boolean readGroupMessage()
-	{
+	{			
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();// connect to DB
-		Query gaeQuery = new Query("groupMessages");// defining the Query
+		Query gaeQuery = new Query("notifications");// defining the Query
 		PreparedQuery pq = datastore.prepare(gaeQuery);// excuting the query
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (Long.toString(entity.getKey().getId()).equals(groupMessageID))
+			
+			if (entity.getProperty("notifID").equals(groupMessageID) && entity.getProperty("RecEmail").equals(User.getCurrentActiveUser().getEmail()))
 			{
-				this.Mesg = (String) entity.getProperty("Mesg");
-				entity.setProperty("isRead", true);//set the approving flag to true
-				if(datastore.put(entity).isComplete())
-				{
-					return true ;
-				}
-				else
-				{
-					return false ;
-				}
+				entity.setProperty("flag", true);//set the approving flag to true
+				datastore.put(entity);
+				break ;
 			}	
 		}
-		return false ;
-	}
-	public ArrayList<Map> getGroupMessages() 
-	{
-		ArrayList<Map> al = new ArrayList();
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query gaeQuery = new Query("groupMessages");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserEmail = User.currentActiveUser.getEmail();
-		
-		for (Entity entity : pq.asIterable()) 
+		gaeQuery = new Query("groupMessages");// defining the Query
+		pq = datastore.prepare(gaeQuery);// excuting the query
+		for(Entity entity2:pq.asIterable())
 		{
-			if (entity.getProperty("RecEmail").toString().equals(currentUserEmail) &&
-					entity.getProperty("isRead").toString().equals("false"))
+			if(Long.toString(entity2.getKey().getId()).equals(groupMessageID))
 			{
-				
-				String chatName = entity.getProperty("chatName").toString();
-				String SenderEmail = entity.getProperty("SendEmail").toString();				
-				UserEntity ue = new UserEntity();
-				String senderID = Long.toString(ue.getUserIDByEmail(SenderEmail));
-				gaeQuery = new Query("users");
-			    pq = datastore.prepare(gaeQuery);
-				for (Entity entity2 : pq.asIterable())
-				{
-					if(Long.toString(entity2.getKey().getId()).equals(senderID))
-					{
-						Map message = new HashMap();
-						message.put("senderName", entity2.getProperty("name"));
-						message.put("id", entity.getKey().getId());//the id of the message record
-						message.put("chatName",chatName );
-						al.add(message);
-					}
-				}				 
-			 }
+				this.Mesg = (String)entity2.getProperty("Mesg");
+				System.out.println(this.Mesg);
+				break;
+			}
 		}
-		return al ;
+		return true ;
 	}		
 }

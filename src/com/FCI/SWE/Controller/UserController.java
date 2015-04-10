@@ -12,11 +12,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -65,8 +67,8 @@ public class UserController {
 	 */
 	@GET
 	@Path("/")
-	public Response index() {//used for logout too
-		User.currentActiveUser = null ;
+	public Response index(@Context HttpServletRequest req) {//used for logout too
+		req.setAttribute("name", null);
 		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}
 
@@ -114,7 +116,6 @@ public class UserController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response response(@FormParam("uname") String uname,
 			@FormParam("email") String email, @FormParam("password") String pass) {
-		
 		//if the field is empty do nothing
 		if(email.equals("") || pass.equals("") || uname.equals(""))
 		{
@@ -156,9 +157,10 @@ public class UserController {
 	@POST
 	@Path("/home")
 	@Produces("text/html")
+	//context is used to handle a session
 	public Response home(@FormParam("uname") String uname,
 			@FormParam("password") String pass) {
-
+		
 		if(pass.equals("") || uname.equals(""))
 		{
 			return null ;	
@@ -177,10 +179,12 @@ public class UserController {
 			JSONObject object = (JSONObject) obj;
 			if (object.get("Status").equals("Failed"))
 				return null;
-			Map<String, String> map = new HashMap<String, String>();
+			
+			Map map = new HashMap();
 			User user = User.getUser(object.toJSONString());
-			map.put("name", user.getName());
-			map.put("email", user.getEmail());
+			map.put("name", object.get("name"));
+			map.put("email",object.get("email"));
+			//setting the session attributes
 			return Response.ok(new Viewable("/jsp/home", map)).build();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

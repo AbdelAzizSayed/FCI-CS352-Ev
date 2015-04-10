@@ -16,10 +16,9 @@ import com.google.appengine.api.datastore.Query;
 
 public class MessageEntity 
 {
-	private String SenderID;
-	private String RecID;
+	private String SenderEmail;
+	private String RecEmail;
 	private String Mesg;
-	private boolean isRead ;
 	private String messageID ;
 	
 	public MessageEntity() {}
@@ -31,36 +30,31 @@ public class MessageEntity
 	{
 		return Mesg ;
 	}
-	public MessageEntity(String SenderID, String RecID, String Mesg, boolean isRead)
+	public MessageEntity(String SenderEmail, String RecEmail, String Mesg)
 	{
-		this.SenderID = SenderID ;
-		this.RecID = RecID ;
+		this.SenderEmail = SenderEmail ;
+		this.RecEmail = RecEmail ;
 		this.Mesg = Mesg ;
-		this.isRead = isRead ;
 	}
 	public boolean SendMessage()
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
-		Query gaeQuery = new Query("messages");
-		PreparedQuery pq = datastore.prepare(gaeQuery);
-		List<Entity> list = pq.asList(FetchOptions.Builder.withDefaults());
-
-		Entity messages = new Entity("messages", list.size() + 1);
+		Entity message = new Entity("messages");//the id in db will be a random number
+	
+		message.setProperty("SendEmail" , SenderEmail);
+		message.setProperty("notifID", RecEmail);
+		message.setProperty("Mesg" ,Mesg );
+		datastore.put(message);
+		messageID = Long.toString(message.getKey().getId());
 		
-		messages.setProperty("SendID",SenderID);
-		messages.setProperty("RecID",RecID);
-		messages.setProperty("Mesg", Mesg);
-		messages.setProperty("isRead", isRead);
-		
-		if(datastore.put(messages).isComplete())
-		{
-			return true ;
-		}
-		else
-		{
-			return false ;
-		}
+		Entity notification = new Entity("notifications");//the id in db will be a random number
+		notification.setProperty("notiClass" , "ReadMessageCommand"); //name of class to handle reaction
+		notification.setProperty("RecEmail" , RecEmail);
+		notification.setProperty("notifID", messageID);
+		datastore.put(notification);
+	
+		return true ;
 	}
 	public boolean readMessage()
 	{
@@ -73,18 +67,19 @@ public class MessageEntity
 			if (Long.toString(entity.getKey().getId()).equals(messageID))
 			{
 				this.Mesg = (String) entity.getProperty("Mesg");
-				entity.setProperty("isRead", true);//set the approving flag to true
-				if(datastore.put(entity).isComplete())
-				{
-					return true ;
-				}
-				else
-				{
-					return false ;
-				}
 			}	
 		}
-		return false ;
+		//remove from notifications
+		gaeQuery = new Query("notifications");
+		pq = datastore.prepare(gaeQuery);// excuting the query
+		for (Entity entity2 : pq.asIterable())
+		{
+			if (entity2.getProperty("notifID").equals(messageID) )
+			{
+				datastore.delete(entity2.getKey());
+			}
+		}
+		return true ;
 	}
 	
 	public ArrayList<Map> getMessages() 

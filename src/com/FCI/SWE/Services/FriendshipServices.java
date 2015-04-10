@@ -34,13 +34,12 @@ public class FriendshipServices {
 	 */
 	@POST
 	@Path("/sendFriendReq")
-	public String sendFriendReq(@FormParam("email") String email) {
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
-		String friendID = Long.toString(UserEntity.getUserIDByEmail(email));
-		FriendshipEntity friendship = new FriendshipEntity(currentUserID, friendID, false );
+	public String sendFriendReq(@FormParam("email") String friendEmail) {
+		String currentUserEmail = User.currentActiveUser.getEmail();
+		FriendshipEntity friendship = new FriendshipEntity(currentUserEmail, friendEmail);
 		JSONObject json = new JSONObject();
 
-		if(friendID.equals("-1"))
+		if(UserEntity.getUserIDByEmail(friendEmail) == -1)
 			json.put("Status", "Failed");
 			
 			
