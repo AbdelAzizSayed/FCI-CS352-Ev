@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=windows-1256"
-    pageEncoding="windows-1256"%><%@ page import="java.io.*,java.util.*" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
+    pageEncoding="windows-1256"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>SocialNet</title>
@@ -15,21 +13,29 @@
     <div class="header">
       <div class="logo">
         <h1><a href="#"><span>FCI</span>SocialNet<small>SWIIProject</small></a></h1>
+
       </div>
 	  <div class="logout">
 			<a href ="/social" ><input type="image" name="imageField" id="imageField" src="/images/out.png" /></a>	
       </div>
-	  
+      
     <div class="content">
       <div class="content_bg">
         <div class="mainbar">
           <div class="article">
-            <h2><span>${it.name} ! Welcome To Your Home Page Again !</span></h2>
+            <h2><span>Create a page </span></h2>
             <div class="clr"></div>
 			<br>
-            <img src="/images/images_1.jpg" width="613" height="193" alt="" />
+			
+			<form action="/social/pageInfo" method="post">
+			     Name :<br><input type="text" name = "pageName"></input><br><br>
+			     Type :<br><input type="text" name = "pageType"></input><br><br>
+			     Category :<br><input type="text" name = "pageCategory"></input><br><br>
+			     
+			     <input type = "submit" value = "Create">
+			</form>
+			
             <div class="clr"></div>
-
           </div>
         </div>
         <div class="sidebar">
@@ -44,7 +50,6 @@
               <li><a href="/social/friendList/">My Friends</a></li>
 			  <li><a href="/social/sendMessage/">Send Message</a></li>
 			  <li><a href="/social/sendGroupMessage/">Send Group Message</a></li>
-			  <li><a href="/social/pageOptions/">Page options</a></li>
             </ul>
           </div>
         </div>
