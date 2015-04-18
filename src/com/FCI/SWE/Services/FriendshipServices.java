@@ -11,8 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
-
-import com.FCI.SWE.Models.User;
 import com.FCI.SWE.NotifCommand.AcceptFriendCommand;
 import com.FCI.SWE.NotifCommand.NotifCommnad;
 import com.FCI.SWE.NotifCommand.ReadGroupMessageCommand;
@@ -34,9 +32,9 @@ public class FriendshipServices {
 	 */
 	@POST
 	@Path("/sendFriendReq")
-	public String sendFriendReq(@FormParam("email") String friendEmail) {
-		String currentUserEmail = User.currentActiveUser.getEmail();
-		FriendshipEntity friendship = new FriendshipEntity(currentUserEmail, friendEmail);
+	public String sendFriendReq(@FormParam("currentEmail") String currentEmail ,@FormParam("email") String friendEmail) 
+	{
+		FriendshipEntity friendship = new FriendshipEntity(currentEmail, friendEmail);
 		JSONObject json = new JSONObject();
 
 		if(UserEntity.getUserIDByEmail(friendEmail) == -1)
@@ -58,10 +56,10 @@ public class FriendshipServices {
 	 */
 	@POST
 	@Path("/friendList")
-	public String friendList() {
+	public String friendList(@FormParam("currentEmail") String currentEmail) {
 		JSONObject object = new JSONObject();
 		FriendshipEntity fe = new FriendshipEntity();
-		ArrayList <String> friendList = fe.getFriendsNameList();
+		ArrayList <String> friendList = fe.getFriendsNameList(currentEmail);
 		object.put("friendList", friendList);
 		return object.toString();
 	}	

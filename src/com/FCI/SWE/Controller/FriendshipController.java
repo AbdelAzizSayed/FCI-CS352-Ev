@@ -3,20 +3,20 @@ package com.FCI.SWE.Controller;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import com.FCI.SWE.Models.User;
 
 @Path("/")
 @Produces("text/html")
@@ -30,9 +30,11 @@ public class FriendshipController {
 	 */
 	@GET
 	@Path("/addFriend")
-	public Response addFriendPage(){
+	public Response addFriendPage(@Context HttpServletRequest req){
 		
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		return Response.ok(new Viewable ("/jsp/friends/addFriend")).build();
@@ -47,15 +49,20 @@ public class FriendshipController {
 	 */
 	@POST
 	@Path("/sendFriendReq")
-	public Response friendReq (@FormParam("email") String email)
+	public Response friendReq (@Context HttpServletRequest req, @FormParam("email") String email)
 	{
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
 		//if the field is empty do nothing
 		if(email.equals(""))
 		{
 			return null ;	
 		}
 		String serviceUrl = "http://localhost:8888/rest/sendFriendReq";
-		String urlParameters = "email=" + email;
+		String urlParameters = "email=" + email + "&currentEmail=" + currentEmail;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser();
@@ -81,13 +88,15 @@ public class FriendshipController {
 	@GET
 	@Path("/friendList")
 	@Produces("text/html")
-	public Response FriendList() 
+	public Response FriendList(@Context HttpServletRequest req) 
 	{
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		String retJson = Connection.connect(
-				"http://localhost:8888/rest/friendList", ""
+				"http://localhost:8888/rest/friendList", "currentEmail=" + currentEmail
 				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
 
 		JSONParser parser = new JSONParser();

@@ -1,12 +1,13 @@
 package com.FCI.SWE.ServicesModels;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.FCI.SWE.Models.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -22,9 +23,10 @@ public class MessageEntity
 	private String messageID ;
 	
 	public MessageEntity() {}
-	public MessageEntity(String messageID) 
+	public MessageEntity(String messageID, String currentEmail) 
 	{
 		this.messageID = messageID ;
+		this.RecEmail = currentEmail;
 	}
 	public String getMesg()
 	{
@@ -47,7 +49,6 @@ public class MessageEntity
 		message.setProperty("Mesg" ,Mesg );
 		datastore.put(message);
 		messageID = Long.toString(message.getKey().getId());
-		
 		Entity notification = new Entity("notifications");//the id in db will be a random number
 		notification.setProperty("notiClass" , "ReadMessageCommand"); //name of class to handle reaction
 		notification.setProperty("RecEmail" , RecEmail);
@@ -88,11 +89,10 @@ public class MessageEntity
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query gaeQuery = new Query("messages");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
 		
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (entity.getProperty("RecID").toString().equals(currentUserID) &&
+			if (entity.getProperty("RecID").toString().equals(RecEmail) &&
 					entity.getProperty("isRead").toString().equals("false"))
 			{
 				String sendID = entity.getProperty("SendID").toString();

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.FCI.SWE.Models.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -18,7 +17,7 @@ public class GroupMessageEntity
 {
 	private String chatName;
 	private String Mesg;
-
+	private String recEmail ;
 	private String groupMessageID ;
 	
 	public GroupMessageEntity() {}
@@ -35,13 +34,18 @@ public class GroupMessageEntity
 		this.chatName = chatName ;
 		this.Mesg = Mesg ;
 	}
+	public GroupMessageEntity(long groupMessageID , String currentEmail)
+	{
+		this.groupMessageID = Long.toString(groupMessageID);
+		this.recEmail = currentEmail;
+	}	
 	/**
 	 * this function takes a chatName and returns its ID
 	 * @param chatName
 	 * 				the chatName to get the matching ID 
 	 * @return the ID of the chatName shring this name
 	 */
-	public boolean sendGroupMessage()
+	public boolean sendGroupMessage(String sender)
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -62,10 +66,7 @@ public class GroupMessageEntity
 		}
 		if (check == false)
 			return false;
- 
-		User Sender = User.getCurrentActiveUser();
-		String sender = Sender.getEmail(); 
-		
+ 		
 		datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		gaeQuery = new Query("groupMessages");
@@ -98,7 +99,7 @@ public class GroupMessageEntity
 		}
 		return true ;
 	}
-	public boolean createGroupChat (String name , String Emails)//finished
+	public boolean createGroupChat (String name , String Emails , String currentEmail)//finished
 	{		
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -114,8 +115,7 @@ public class GroupMessageEntity
 			}	
 		}		
 		Entity groupChatName = new Entity("messageGroups");//the id in db will be random number
-		User Sender = User.getCurrentActiveUser();
-		Emails += "," + Sender.getEmail();
+		Emails += "," + currentEmail;
 		
 		groupChatName.setProperty("chatName", name);
 		groupChatName.setProperty("Emails", Emails);
@@ -138,7 +138,7 @@ public class GroupMessageEntity
 		for (Entity entity : pq.asIterable()) 
 		{
 			
-			if (entity.getProperty("notifID").equals(groupMessageID) && entity.getProperty("RecEmail").equals(User.getCurrentActiveUser().getEmail()))
+			if (entity.getProperty("notifID").equals(groupMessageID) && entity.getProperty("RecEmail").equals(recEmail))
 			{
 				datastore.delete(entity.getKey());//delete notification
 				break ;

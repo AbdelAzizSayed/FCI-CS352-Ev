@@ -7,9 +7,9 @@ import com.FCI.SWE.ServicesModels.GroupMessageEntity;
 public class ReadGroupMessageCommand implements NotifCommnad {
 
 	private GroupMessageEntity me ;
-	public ReadGroupMessageCommand(String notID) 
+	public ReadGroupMessageCommand(String notID, String currentEmail) 
 	{
-		me = new GroupMessageEntity(notID); 
+		me = new GroupMessageEntity(Long.parseLong(notID) ,currentEmail); 
 	}
 
 	@Override

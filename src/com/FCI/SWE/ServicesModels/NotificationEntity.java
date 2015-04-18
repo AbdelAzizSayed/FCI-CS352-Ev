@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.FCI.SWE.Models.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -13,17 +12,16 @@ import com.google.appengine.api.datastore.Query;
 
 public class NotificationEntity 
 {
-	public ArrayList<Map> getNotifications() 
+	public ArrayList<Map> getNotifications(String currentEmail) 
 	{
 		ArrayList<Map> al = new ArrayList();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query gaeQuery = new Query("notifications");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserEmail = User.currentActiveUser.getEmail();
 		
 		for (Entity entity : pq.asIterable()) 
 		{
-			if (entity.getProperty("RecEmail").toString().equals(currentUserEmail))
+			if (entity.getProperty("RecEmail").toString().equals(currentEmail))
 			{
 				
 				String notID = "";// messageGroupID or FriendrequestSenderEmail or messageID 

@@ -28,7 +28,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
 import com.FCI.SWE.ServicesModels.GroupMessageEntity;
@@ -44,14 +43,12 @@ public class MessageServices {
 	@POST
 	@Path("/sendMessage")
 	public String SendMesg(@FormParam("message") String Message,
-			@FormParam("recEmail") String recEmail) {
+			@FormParam("recEmail") String recEmail ,@FormParam("currentEmail") String currentEmail) {
 		
 		JSONObject object = new JSONObject();
-		User Sender = User.getCurrentActiveUser();
-		String SenderEmail = Sender.getEmail();
 		UserEntity Rec = new UserEntity();
 
-		MessageEntity Mesg = new MessageEntity(SenderEmail, recEmail, Message) ;
+		MessageEntity Mesg = new MessageEntity(currentEmail, recEmail, Message) ;
 		
 		JSONObject json = new JSONObject();
 		if(Mesg.SendMessage())
@@ -64,15 +61,14 @@ public class MessageServices {
 	@POST
 	@Path("/groupMesgEmails")
 	public String createGroupMesg(@FormParam("chatName") String chatName,
-			@FormParam("recEmails") String Emails) 
+			@FormParam("recEmails") String Emails , @FormParam("currentEmail") String currentEmail) 
 	{
-		System.out.println(chatName + " " + Emails);
 		JSONObject object = new JSONObject();
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
 		GroupMessageEntity gme = new GroupMessageEntity();
-		if(gme.createGroupChat(chatName, Emails))
+		if(gme.createGroupChat(chatName, Emails , currentEmail))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
@@ -82,14 +78,14 @@ public class MessageServices {
 	@POST
 	@Path("/groupMesg")
 	public String sendGroupMessage(@FormParam("message") String message,
-			@FormParam("chatName") String chatName)
+			@FormParam("chatName") String chatName , @FormParam("currentEmail") String currentEmail)
 	{
 		JSONObject object = new JSONObject();
 		
 		MessageEntity Mesg = new MessageEntity() ;
 		JSONObject json = new JSONObject();
 		GroupMessageEntity gme = new GroupMessageEntity(chatName , message);
-		if(gme.sendGroupMessage())
+		if(gme.sendGroupMessage(currentEmail))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");

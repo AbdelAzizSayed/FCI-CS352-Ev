@@ -6,9 +6,9 @@ import com.FCI.SWE.ServicesModels.FriendshipEntity;
 public class AcceptFriendCommand implements NotifCommnad {
 
 	private FriendshipEntity fe ;
-	public AcceptFriendCommand(String netID)
+	public AcceptFriendCommand(String netID, String currentEmail)
 	{
-		fe =  new FriendshipEntity(netID) ;
+		fe =  new FriendshipEntity(netID, currentEmail) ;
 	}
 	@Override
 	public boolean excute() 

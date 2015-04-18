@@ -10,11 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -25,7 +27,6 @@ import org.json.simple.parser.ParseException;
 
 import sun.org.mozilla.javascript.internal.ast.ForInLoop;
 
-import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
@@ -35,26 +36,32 @@ import com.google.appengine.api.urlfetch.HTTPRequest;
 public class MessagesController {
 	@GET
 	@Path("/sendMessage")
-	public Response sendMesg() 
+	public Response sendMesg(@Context HttpServletRequest req) 
 	{		
-		if (User.getCurrentActiveUser() == null) {
-				return Response.ok(new Viewable("/jsp/error")).build();
-	}
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
 		return Response.ok(new Viewable("/jsp/Messages")).build();
-	}
-	
+	}	
 	@POST
 	@Path("/sendMesg")
 	@Produces("text/html")
-	public Response sendMessage(@FormParam("message") String Message,
+	public Response sendMessage(@Context HttpServletRequest req, @FormParam("message") String Message,
 			@FormParam("recEmail") String RecEmail) {
 		
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}
 		//if there's no message typed do nothing
 		if(Message.equals("")  || RecEmail.equals(""))
 		{
 			return null ;	
 		}
-		String urlParameters = "message=" + Message + "&recEmail=" + RecEmail;
+		String urlParameters = "message=" + Message + "&recEmail=" + RecEmail +"&currentEmail=" + currentEmail;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/sendMessage"
 				, urlParameters,
@@ -75,9 +82,11 @@ public class MessagesController {
 	
 	@GET
 	@Path("/sendGroupMessage")
-	public Response sendGroupMessage()
+	public Response sendGroupMessage(@Context HttpServletRequest req)
 	{
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}		
 		return Response.ok(new Viewable("/jsp/GroupMessages")).build();
@@ -85,9 +94,11 @@ public class MessagesController {
 	
 	@POST
 	@Path("/createMessageGroup")
-	public Response createMessageGroup()
+	public Response createMessageGroup(@Context HttpServletRequest req)
 	{
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}		
 		return Response.ok(new Viewable("/jsp/createMessageGroup")).build();
@@ -96,18 +107,20 @@ public class MessagesController {
 	@POST
 	@Path("/groupMsgEmails")
 	@Produces("text/html")
-	public Response createGroupMessage(@FormParam("chatName") String chatName,
+	public Response createGroupMessage(@Context HttpServletRequest req , @FormParam("chatName") String chatName,
 			@FormParam("recEmails") String recEmails)
 		{
-			if (User.getCurrentActiveUser() == null) {
+			String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+			if(currentEmail.equals(""))
+			{
 				return Response.ok(new Viewable("/jsp/error")).build();
-			}		
+			}
 		//if there's no message typed do nothing
 			if(chatName.equals("")  || recEmails.equals(""))
 			{
 				return null ;	
 			}
-		String urlParameters = "chatName=" + chatName + "&recEmails=" + recEmails;
+		String urlParameters = "chatName=" + chatName + "&recEmails=" + recEmails + "&currentEmail=" + currentEmail;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/groupMesgEmails"
 				, urlParameters,
@@ -129,18 +142,20 @@ public class MessagesController {
 	@POST
 	@Path("/groupMesg")
 	@Produces("text/html")
-	public Response sendGroupMessage(@FormParam("message") String message,
+	public Response sendGroupMessage(@Context HttpServletRequest req, @FormParam("message") String message,
 			@FormParam("chatName") String chatName) 
 	{		
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
+			return Response.ok(new Viewable("/jsp/error")).build();
+		}		
 		//if there's no message typed do nothing
 		if(message.equals("") || chatName.equals(""))
 		{
 			return null ;	
-		}
-		if (User.getCurrentActiveUser() == null) {
-			return Response.ok(new Viewable("/jsp/error")).build();
 		}		
-		String urlParameters = "message=" + message + "&chatName=" + chatName;
+		String urlParameters = "message=" + message + "&chatName=" + chatName + "&currentEmail=" + currentEmail;
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/groupMesg"
 				, urlParameters,

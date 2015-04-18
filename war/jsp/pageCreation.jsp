@@ -27,7 +27,7 @@
             <div class="clr"></div>
 			<br>
 			
-			<form action="/social/pageInfo" method="post">
+			<form action="/social/createPage" method="post">
 			     Name :<br><input type="text" name = "pageName"></input><br><br>
 			     Type :<br><input type="text" name = "pageType"></input><br><br>
 			     Category :<br><input type="text" name = "pageCategory"></input><br><br>
@@ -43,6 +43,8 @@
             <h2 class="star"> Menu</h2>
             <div class="clr"></div>
             <ul class="sb_menu">              
+             <li><a href="/social/timelinePage/"><%=request.getSession().getAttribute("currentName")%>'s Timeline</a></li>
+              <li><a href="/social/newsFeed/">News Feed</a></li>        
               <li><a href="/social/showNotifications/">Notifications</a></li>
               <li><a href="/social/addFriend/">Add Friend</a></li>
               <li><a href="/social/join/">Join Group</a></li>
@@ -50,6 +52,9 @@
               <li><a href="/social/friendList/">My Friends</a></li>
 			  <li><a href="/social/sendMessage/">Send Message</a></li>
 			  <li><a href="/social/sendGroupMessage/">Send Group Message</a></li>
+			  <li><a href="/social/pageOptions/">Page options</a></li>
+			  <li><a href="/social/getHashtagOptions/">Hashtag Options</a></li>
+			  <li><a href="/social/accountSearch/">Account Search</a></li>
             </ul>
           </div>
         </div>

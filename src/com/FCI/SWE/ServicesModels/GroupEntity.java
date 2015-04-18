@@ -2,7 +2,6 @@ package com.FCI.SWE.ServicesModels;
 
 import java.util.List;
 
-import com.FCI.SWE.Models.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -14,7 +13,7 @@ public class GroupEntity {
 	private String name;
 	private String description;
 	private String privacy;
-	private long ownerId;
+	private String ownerEmail;
 
 	public String getName(){
 		return name;
@@ -28,8 +27,8 @@ public class GroupEntity {
 		return privacy;
 	}
 	
-	public long getOwnerId(){
-		return ownerId;
+	public String getOwnerEmail(){
+		return ownerEmail;
 	}
 	
 	public void setName(String name){
@@ -44,15 +43,16 @@ public class GroupEntity {
 		this.privacy = privacy;
 	}
 	
-	public void setOwnerId(long id){
-		this.ownerId = id;
+	public void setOwnerEmail(String Email){
+		this.ownerEmail = Email;
 	}
 
 	/**
 	 * this function add a group data to the database 
 	 * @return true or false
 	 */
-	public Boolean saveGroup() {
+	public Boolean saveGroup() 
+	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
 		Query gaeQuery = new Query("groups");
@@ -64,7 +64,7 @@ public class GroupEntity {
 		group.setProperty("name", this.name);
 		group.setProperty("description", this.description);
 		group.setProperty("privacy", this.privacy);
-		group.setProperty("owner_id",this.ownerId);
+		group.setProperty("ownerEmail",this.ownerEmail);
 		
 		if(datastore.put(group).isComplete())
 			return true;
@@ -77,7 +77,7 @@ public class GroupEntity {
 	 * 				the group ID to join
 	 * @return true or false
 	 */
-	public Boolean joinGroup(String gpID)
+	public Boolean joinGroup(String gpID, String currentEmail)
 	{
 		DatastoreService datastore = DatastoreServiceFactory
 				.getDatastoreService();
@@ -87,7 +87,7 @@ public class GroupEntity {
 
 		Entity memeber = new Entity("memeber", list.size() + 1);
 
-		memeber.setProperty("userID",User.getCurrentActiveUser().getId() );
+		memeber.setProperty("userEmail", currentEmail );
 		memeber.setProperty("groupId", gpID);
 		if(datastore.put(memeber).isComplete())
 		{

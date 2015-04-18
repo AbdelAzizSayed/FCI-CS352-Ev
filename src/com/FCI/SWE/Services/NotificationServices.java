@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.json.simple.JSONObject;
 
-import com.FCI.SWE.Models.User;
 import com.FCI.SWE.NotifCommand.AcceptFriendCommand;
 import com.FCI.SWE.NotifCommand.NotifCommnad;
 import com.FCI.SWE.NotifCommand.ReadGroupMessageCommand;
@@ -31,12 +30,11 @@ public class NotificationServices
 	
 	@POST
 	@Path("/notificationReaction")
-	public String notificationsReaction(@FormParam("notID") String notID,
+	public String notificationsReaction( @FormParam("currentEmail") String currentEmail, @FormParam("notID") String notID,
 									@FormParam("notType") String notType) throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
 		JSONObject json = new JSONObject();
-		String currentUserID = Long.toString(User.currentActiveUser.getId());
-		NotifCommnad ncom = (NotifCommnad)Class.forName("com.FCI.SWE.NotifCommand." + notType).getConstructor(String.class).newInstance(notID);	
+		NotifCommnad ncom = (NotifCommnad)Class.forName("com.FCI.SWE.NotifCommand." + notType).getConstructor(String.class, String.class).newInstance(notID, currentEmail);	
 		if(ncom.excute())
 		{
 			json.put("Status", "OK");
@@ -48,13 +46,12 @@ public class NotificationServices
 	}	
 	@POST
 	@Path("/showNotifications")
-	public String notifications() 
+	public String notifications(@FormParam("currentEmail") String currentEmail) 
 	{
 		JSONObject object = new JSONObject();
 		NotificationEntity ne = new NotificationEntity() ;
-		ArrayList <Map> groupMessages = ne.getNotifications();
+		ArrayList <Map> groupMessages = ne.getNotifications(currentEmail);
 		object.put("notifications", groupMessages);
-		System.out.println(object.toString());
 		return object.toString();
 	}
 }

@@ -7,6 +7,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +30,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import sun.org.mozilla.javascript.internal.ast.ForInLoop;
-
-import com.FCI.SWE.Models.User;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
@@ -68,6 +68,11 @@ public class UserController {
 	@GET
 	@Path("/")
 	public Response index(@Context HttpServletRequest req) {//used for logout too
+		Timestamp timestamp1 = new Timestamp(new Date(System.currentTimeMillis()).getTime());
+		System.out.println(timestamp1);
+		Timestamp timestamp2 = new Timestamp(new Date(System.currentTimeMillis()).getTime());
+		System.out.println(timestamp2);
+		//System.out.println(timestamp1. timestamp2);
 		req.setAttribute("name", null);
 		return Response.ok(new Viewable("/jsp/entryPoint")).build();
 	}
@@ -158,7 +163,7 @@ public class UserController {
 	@Path("/home")
 	@Produces("text/html")
 	//context is used to handle a session
-	public Response home(@FormParam("uname") String uname,
+	public Response home(@Context HttpServletRequest req, @FormParam("uname") String uname,
 			@FormParam("password") String pass) {
 		
 		if(pass.equals("") || uname.equals(""))
@@ -181,7 +186,8 @@ public class UserController {
 				return null;
 			
 			Map map = new HashMap();
-			User user = User.getUser(object.toJSONString());
+			req.getSession(true).setAttribute("currentName",object.get("name"));			
+			req.getSession(true).setAttribute("currentEmail",object.get("email"));
 			map.put("name", object.get("name"));
 			map.put("email",object.get("email"));
 			//setting the session attributes

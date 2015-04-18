@@ -1,10 +1,12 @@
 package com.FCI.SWE.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.mvc.Viewable;
@@ -12,7 +14,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.FCI.SWE.Models.User;
 
 @Path("/")
 @Produces("text/html")
@@ -25,9 +26,11 @@ public class GroupController {
 	*/
 	@GET
 	@Path("/group")
-	public Response group() {
+	public Response group(@Context HttpServletRequest req) {
 
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/createGroup")).build();
@@ -43,9 +46,11 @@ public class GroupController {
 	*/	
 	@GET
 	@Path("/join")
-	public Response join() {
+	public Response join(@Context HttpServletRequest req) {
 
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		return Response.ok(new Viewable("/jsp/GroupViews/joinGroup")).build();
@@ -66,15 +71,17 @@ public class GroupController {
 	 */	
 	@POST
 	@Path("/CreateGroup")
-	public Response createGroup(@FormParam("name") String name,
+	public Response createGroup(@Context HttpServletRequest req ,@FormParam("name") String name,
 			@FormParam("desc") String desc, @FormParam("privacy") String privacy) {
 		
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		
 		String serviceUrl = "http://localhost:8888/rest/CreateGroupService";
-		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
+		String urlParameters = "currentEmail=" + currentEmail
 				+ "&name=" + name + "&desc=" + desc + "&privacy=" + privacy;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
@@ -102,18 +109,18 @@ public class GroupController {
 	 */	
 	@POST
 	@Path("/JoinGroup")
-	public Response joinGroup(
-		@FormParam("gpID") String gpID) 
+	public Response joinGroup(@Context HttpServletRequest req,@FormParam("gpID") String gpID) 
 	{
-		if (User.getCurrentActiveUser() == null) {
+		String currentEmail = req.getSession().getAttribute("currentEmail").toString();
+		if(currentEmail.equals(""))
+		{
 			return Response.ok(new Viewable("/jsp/error")).build();
 		}
 		
 		String serviceUrl = "http://localhost:8888/rest/JoinGroupService";
 		//String serviceUrl = "http://localhost:8888/rest/JoinGroupService";
-		String urlParameters = "user_id=" + User.getCurrentActiveUser().getId()
+		String urlParameters = "currentEmail=" + currentEmail
 				+ "&gpID=" + gpID;
-		System.out.println("here " + gpID);
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 				"application/x-www-form-urlencoded;charset=UTF-8");
 		JSONParser parser = new JSONParser();

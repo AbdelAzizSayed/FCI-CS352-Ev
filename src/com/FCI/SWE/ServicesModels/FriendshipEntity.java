@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.FCI.SWE.Models.User;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -68,38 +71,36 @@ public class FriendshipEntity {
 				.getDatastoreService();// connect to DB
 			Entity entity = new Entity("friendship");
 			entity.setProperty("SendEmail", friendEmail);
-			entity.setProperty("RecEmail", User.currentActiveUser.getEmail());
+			entity.setProperty("RecEmail", currentUserEmail);
 			datastore.put(entity);
 			datastore = DatastoreServiceFactory.getDatastoreService();
 			Query gaeQuery = new Query("notifications");
 			PreparedQuery pq = datastore.prepare(gaeQuery);
 			for (Entity entity2 : pq.asIterable())
 			{
-				if (entity2.getProperty("RecEmail").toString().equals(User.currentActiveUser.getEmail())
+				if (entity2.getProperty("RecEmail").toString().equals(currentUserEmail)
 						&& entity2.getProperty("notifID").toString().equals(friendEmail) )
 				{
 					datastore.delete(entity2.getKey());
 				}
 			}
 			return true ;
-
 	}
 	/**
 	 * this function is used to get the names if friends in the
 	 * friend request list 
 	 * @return arraylist of string each represents user name
 	 */	
-	public ArrayList<String> getFriendsNameList() 
+	public ArrayList<String> getFriendsNameList(String currentEmail) 
 	{
 		ArrayList<String> al = new ArrayList();
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Query gaeQuery = new Query("friendship");
 		PreparedQuery pq = datastore.prepare(gaeQuery);
-		String currentUserEmail = User.currentActiveUser.getEmail();
 		for (Entity entity : pq.asIterable()) 
 		{
-				if (entity.getProperty("SendEmail").toString().equals(currentUserEmail) 
-					||	entity.getProperty("RecEmail").toString().equals(currentUserEmail) )
+				if (entity.getProperty("SendEmail").toString().equals(currentEmail) 
+					||	entity.getProperty("RecEmail").toString().equals(currentEmail) )
 				{
 					
 					String SenderEmail = entity.getProperty("SendEmail").toString();
@@ -108,13 +109,13 @@ public class FriendshipEntity {
 				    pq = datastore.prepare(gaeQuery);
 					for (Entity entity2 : pq.asIterable())
 					{
-						if (entity.getProperty("SendEmail").toString().equals(currentUserEmail) 
+						if (entity.getProperty("SendEmail").toString().equals(currentEmail) 
 								&&(entity2.getProperty("email").toString().equals(RecEmail)))
 						{
 							al.add((String) entity2.getProperty("name"));
 						}
 						else if (entity2.getProperty("email").toString().equals(SenderEmail) 
-								&&(entity.getProperty("RecEmail").toString().equals(currentUserEmail)))
+								&&(entity.getProperty("RecEmail").toString().equals(currentEmail)))
 						{
 							al.add((String) entity2.getProperty("name"));
 						}
@@ -122,5 +123,25 @@ public class FriendshipEntity {
 				}
 		}
 		return al;
+	}
+	public boolean isFriend(String accountEmail, String currentEmail) 
+	{
+		if(accountEmail.equals(currentEmail))//used in hash tag timeline when the current user is previwing his posts there
+			return true ;
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		Query gaeQuery = new Query("friendship");
+		PreparedQuery pq = datastore.prepare(gaeQuery);
+		for (Entity entity : pq.asIterable()) 
+		{
+				if ((entity.getProperty("SendEmail").toString().equals(currentEmail) 
+					&&	entity.getProperty("RecEmail").toString().equals(accountEmail)) 
+					||(entity.getProperty("SendEmail").toString().equals(accountEmail) 
+							&&	entity.getProperty("RecEmail").toString().equals(currentEmail)))
+				{
+					return true ;
+				}
+		}
+	
+		return false;
 	}	
 }

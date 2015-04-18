@@ -31,7 +31,7 @@ public class GroupServices {
 	 */
 	@POST
 	@Path("/CreateGroupService")
-	public String createGroup(@FormParam("user_id") String userId,
+	public String createGroup(@FormParam("currentEmail") String currentEmail,
 			@FormParam("name") String name,
 			@FormParam("desc") String desc,
 			@FormParam("privacy") String privacy) {
@@ -39,7 +39,7 @@ public class GroupServices {
 		GroupEntity groupEntity = new GroupEntity();
 		groupEntity.setDescription(desc);
 		groupEntity.setName(name);
-		groupEntity.setOwnerId(Long.parseLong(userId));
+		groupEntity.setOwnerEmail(currentEmail);
 		groupEntity.setPrivacy(privacy);
 		JSONObject json = new JSONObject();
 		if(groupEntity.saveGroup())
@@ -59,13 +59,12 @@ public class GroupServices {
 	 */	
 	@POST
 	@Path("/JoinGroupService")
-	public String joinGroup(@FormParam("user_id") String userId,
+	public String joinGroup(@FormParam("currentEmail") String currentEmail,
 			@FormParam("gpID") String gpID) {
 		
 		GroupEntity groupEntity = new GroupEntity();
-		System.out.println(" herererrere " + gpID);
 		JSONObject json = new JSONObject();
-		if(groupEntity.joinGroup(gpID))
+		if(groupEntity.joinGroup(gpID, currentEmail))
 			json.put("Status", "OK");
 		else
 			json.put("Status", "Failed");
