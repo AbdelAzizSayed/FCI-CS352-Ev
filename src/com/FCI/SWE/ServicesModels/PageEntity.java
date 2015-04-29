@@ -110,7 +110,27 @@ public class PageEntity
 				datastore.put(e);
 				break ;
 			}
+		} 
+		datastore = DatastoreServiceFactory.getDatastoreService();
+		gaeQuery = new Query ("pages");
+		pq = datastore.prepare(gaeQuery);
+		String pageOwnerEmail = "";
+		for(Entity page : pq.asIterable())
+		{
+			if(page.getProperty("pageName").toString().equals(pageName))
+			{
+				pageOwnerEmail = page.getProperty("createdEmail").toString();
+				break ;
+			}
 		}
+		UserEntity ue = new UserEntity();
+		String actionPerformerName = ue.getUserNameByEmail(email);
+		Entity notification = new Entity ("notifications") ;
+		notification.setProperty("RecEmail" , pageOwnerEmail);
+		notification.setProperty("actionPerformer" , actionPerformerName); // who did the like
+		notification.setProperty("notiClass" , "DiscardPageLikeCommand" );
+		notification.setProperty("notifID" , pageName );
+		datastore.put(notification);			
 		return true ;
 	}	
 }

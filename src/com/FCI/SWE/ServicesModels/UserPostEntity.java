@@ -12,37 +12,27 @@ import com.google.appengine.api.datastore.Query;
 
 public class UserPostEntity extends PostEntity
 {
-	private String currentEmail ;
 	private String feeling ;
-	private String custom ;
+	private String Custom ;
 	private String postedBy ;
-	public UserPostEntity() {
-		// TODO Auto-generated constructor stub
-	}	
-	public UserPostEntity(String currentEmail, String postContent ,
-			String privacy ,String feeling ,String custom ,
-			boolean isShare)
+	
+	public UserPostEntity() {}
+	public void setFeeling(String feeling) 
 	{
-		this.currentEmail = currentEmail ;
-		this.postContent = postContent ;
-		this.privacy = privacy ;
 		this.feeling = feeling ;
-		this.custom = custom ;
-		this.isShare = isShare ;					
-	}	
-	public long createPost()
+	}
+	public long savePost()
 	{
-		postType = "user" ;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity post = new Entity("posts");
-		post.setProperty("owner" ,currentEmail );//who added the post
+		post.setProperty("owner" ,postOwner );//who added the post
 		post.setProperty("postContent",postContent );
-		post.setProperty("privacy", privacy);
+		post.setProperty("privacy", privacy.getPrivacy());
 		post.setProperty("feeling", feeling);
 		post.setProperty("likes", 0);	
 		post.setProperty("likers", "");//who liked the page
-		if(privacy.equals("custom"))// if the privacy is custom			
-			post.setProperty("custom",custom );
+		if(privacy.getPrivacy().equals("Custom"))// if the privacy is Custom			
+			post.setProperty("Custom",privacy.getCustom());
 		post.setProperty("isShare", isShare);//here it's not a shared page
 		post.setProperty("postType", postType);
 		post.setProperty("postedBy", "");
@@ -154,9 +144,9 @@ public class UserPostEntity extends PostEntity
 						String owner = e2.getProperty("owner").toString();
 						if(Long.toString(e2.getKey().getId()).equals(sharedPostID) )
 						{
-							if(e.getProperty("postType").toString().equals("user") && (e2.getProperty("privacy").toString().equals("public") 
-									||(e2.getProperty("privacy").toString().equals("private")&& fe.isFriend(accountEmail, currentEmail)
-							||(e2.getProperty("privacy").toString().equals("custom")&& e2.getProperty("custom").toString().contains(currentEmail)))))
+							if(e.getProperty("postType").toString().equals("user") && (e2.getProperty("privacy").toString().equals("Public") 
+									||(e2.getProperty("privacy").toString().equals("Private")&& fe.isFriend(accountEmail, currentEmail)
+							||(e2.getProperty("privacy").toString().equals("Custom")&& e2.getProperty("Custom").toString().contains(currentEmail)))))
 							{
 								UserEntity ue = new UserEntity();
 								Map <String ,String>  post = new HashMap();
@@ -179,7 +169,7 @@ public class UserPostEntity extends PostEntity
 							{
 								Query gaeQuery2 = new Query ("pages");
 								PreparedQuery pq2 = datastore.prepare(gaeQuery2);
-								String pageLikers = "";//for private post privacy
+								String pageLikers = "";//for Private post privacy
 								for(Entity e3: pq2.asIterable())
 								{
 									if(e3.getProperty("pageName").toString().equals(owner) )
@@ -188,8 +178,8 @@ public class UserPostEntity extends PostEntity
 									}
 									break ;
 								}
-								if(e2.getProperty("privacy").toString().equals("public") 
-										|| (e2.getProperty("privacy").toString().equals("private") && pageLikers.contains(currentEmail)))
+								if(e2.getProperty("privacy").toString().equals("Public") 
+										|| (e2.getProperty("privacy").toString().equals("Private") && pageLikers.contains(currentEmail)))
 								{
 									UserEntity ue = new UserEntity();
 									Map <String ,String>  post = new HashMap();
@@ -207,9 +197,9 @@ public class UserPostEntity extends PostEntity
 				}
 				else // normal posts
 				{
-					if(e.getProperty("privacy").toString().equals("public") 
-							||(e.getProperty("privacy").toString().equals("private")&& fe.isFriend(accountEmail, currentEmail)
-					||(e.getProperty("privacy").toString().equals("custom")&& e.getProperty("custom").toString().contains(currentEmail))))
+					if(e.getProperty("privacy").toString().equals("Public") 
+							||(e.getProperty("privacy").toString().equals("Private")&& fe.isFriend(accountEmail, currentEmail)
+					||(e.getProperty("privacy").toString().equals("Custom")&& e.getProperty("Custom").toString().contains(currentEmail))))
 					{
 						UserEntity ue = new UserEntity();
 						Map <String ,String>  post = new HashMap();
@@ -246,7 +236,7 @@ public class UserPostEntity extends PostEntity
 		Entity post = new Entity("posts");
 		post.setProperty("owner", friendEmail );
 		post.setProperty("postContent",postContent );
-		post.setProperty("privacy", "public");
+		post.setProperty("privacy", "Public");
 		post.setProperty("feeling", feeling);
 		post.setProperty("likes", 0);	
 		post.setProperty("likers", "");//who liked the page
@@ -278,9 +268,9 @@ public class UserPostEntity extends PostEntity
 						String owner = sharedPost.getProperty("owner").toString();
 						if(Long.toString(sharedPost.getKey().getId()).equals(sharedPostID) )
 						{
-							if(post.getProperty("postType").toString().equals("user") && (sharedPost.getProperty("privacy").toString().equals("public") 
-									||(sharedPost.getProperty("privacy").toString().equals("private")&& fe.isFriend(owner, currentEmail)
-							||(sharedPost.getProperty("privacy").toString().equals("custom")&& sharedPost.getProperty("custom").toString().contains(currentEmail)))))
+							if(post.getProperty("postType").toString().equals("user") && (sharedPost.getProperty("privacy").toString().equals("Public") 
+									||(sharedPost.getProperty("privacy").toString().equals("Private")&& fe.isFriend(owner, currentEmail)
+							||(sharedPost.getProperty("privacy").toString().equals("Custom")&& sharedPost.getProperty("Custom").toString().contains(currentEmail)))))
 							{
 								UserEntity ue = new UserEntity();
 								Map <String ,String>  newsFeedPost = new HashMap();
@@ -303,7 +293,7 @@ public class UserPostEntity extends PostEntity
 							{
 								Query gaeQuery2 = new Query ("pages");
 								PreparedQuery pq2 = datastore.prepare(gaeQuery2);
-								String pageLikers = "";//for private post privacy
+								String pageLikers = "";//for Private post privacy
 								for(Entity page: pq2.asIterable())
 								{
 									if(page.getProperty("pageName").toString().equals(owner) )
@@ -312,8 +302,8 @@ public class UserPostEntity extends PostEntity
 									}
 									break ;
 								}
-								if(sharedPost.getProperty("privacy").toString().equals("public") 
-										|| (sharedPost.getProperty("privacy").toString().equals("private") && pageLikers.contains(currentEmail)))
+								if(sharedPost.getProperty("privacy").toString().equals("Public") 
+										|| (sharedPost.getProperty("privacy").toString().equals("Private") && pageLikers.contains(currentEmail)))
 								{
 									UserEntity ue = new UserEntity();
 									Map <String ,String>  newsFeedPost = new HashMap();
@@ -334,9 +324,9 @@ public class UserPostEntity extends PostEntity
 					if(post.getProperty("postType").toString().equals("user"))
 					{
 						String owner = post.getProperty("owner").toString();
-						if(post.getProperty("privacy").toString().equals("public") 
-								||(post.getProperty("privacy").toString().equals("private")&& fe.isFriend(owner, currentEmail)
-						||(post.getProperty("privacy").toString().equals("custom")&& post.getProperty("custom").toString().contains(currentEmail))))
+						if(post.getProperty("privacy").toString().equals("Public") 
+								||(post.getProperty("privacy").toString().equals("Private")&& fe.isFriend(owner, currentEmail)
+						||(post.getProperty("privacy").toString().equals("Custom")&& post.getProperty("Custom").toString().contains(currentEmail))))
 						{
 							UserEntity ue = new UserEntity();
 							Map <String ,String>  newsFeedPost = new HashMap();
@@ -365,7 +355,7 @@ public class UserPostEntity extends PostEntity
 					{
 							Query gaeQuery2 = new Query ("pages");
 							PreparedQuery pq2 = datastore.prepare(gaeQuery2);
-							String pageLikers = "";//for private post privacy
+							String pageLikers = "";//for Private post privacy
 							String owner = post.getProperty("owner").toString();
 							for(Entity page: pq2.asIterable())
 							{
@@ -375,8 +365,8 @@ public class UserPostEntity extends PostEntity
 								}
 								break ;
 							}
-							if(post.getProperty("privacy").toString().equals("public") 
-									|| (post.getProperty("privacy").toString().equals("private") && pageLikers.contains(currentEmail)))
+							if(post.getProperty("privacy").toString().equals("Public") && pageLikers.contains(currentEmail)
+									|| (post.getProperty("privacy").toString().equals("Private") && pageLikers.contains(currentEmail)))
 							{
 								if(!post.getProperty("seeners").toString().contains(currentEmail))
 								{

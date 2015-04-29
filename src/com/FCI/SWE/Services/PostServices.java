@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,12 +30,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.FCI.SWE.NotifCommand.NotifCommnad;
 import com.FCI.SWE.ServicesModels.FriendshipEntity;
 import com.FCI.SWE.ServicesModels.GroupEntity;
 import com.FCI.SWE.ServicesModels.MessageEntity;
+import com.FCI.SWE.ServicesModels.PagePostBuilder;
 import com.FCI.SWE.ServicesModels.PagePostEntity;
+import com.FCI.SWE.ServicesModels.PostBuilder;
+import com.FCI.SWE.ServicesModels.Privacy;
 import com.FCI.SWE.ServicesModels.UserEntity;
 import com.FCI.SWE.ServicesModels.PostEntity;
+import com.FCI.SWE.ServicesModels.UserPostBuilder;
 import com.FCI.SWE.ServicesModels.UserPostEntity;
 import com.google.appengine.api.urlfetch.HTTPRequest;
 
@@ -45,15 +51,21 @@ public class PostServices
 {
 		
 	@POST
-	@Path("/createPost")
+	@Path("/createPost")//page or firend
 	public String createPost(@FormParam("currentEmail") String currentEmail, 
 			@FormParam("postContent") String postContent ,
 			@FormParam("privacy") String privacy, @FormParam("feeling") String feeling,
-			@FormParam("custom") String custom)
+			@FormParam("custom") String custom) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException
 	{
-		UserPostEntity upe = new UserPostEntity(currentEmail, postContent, privacy, feeling, custom, false);
+		PostBuilder pb = new UserPostBuilder() ;
+		Privacy p =(Privacy)Class.forName("com.FCI.SWE.ServicesModels." + privacy).getConstructor(String.class).newInstance(custom);
+		pb.buildPostContent(postContent);
+		pb.buildPostOwner(currentEmail);
+		pb.buildPostFeeling(feeling);
+		pb.buildPrivacy(p);
+		
 		JSONObject object = new JSONObject();
-		long postID = upe.createPost() ;
+		long postID = pb.savePost(); ;
 		if(postID != -1)
 		{
 			object.put("postID", postID);
@@ -83,11 +95,16 @@ public class PostServices
 	@POST
 	@Path("/createPagePost")
 	public String createPost(@FormParam("pageName") String pageName, 
-			@FormParam("postContent") String postContent , @FormParam("privacy") String privacy)
+			@FormParam("postContent") String postContent , @FormParam("privacy") String privacy) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException
 	{
-		PagePostEntity upe = new PagePostEntity(pageName, postContent, privacy, false);
+		String custom = "" ;//no custom in page
+		PostBuilder pb = new PagePostBuilder() ;
+		Privacy p =(Privacy)Class.forName("com.FCI.SWE.ServicesModels." + privacy).getConstructor(String.class).newInstance(custom);
+		pb.buildPostContent(postContent);
+		pb.buildPostOwner(pageName);
+		pb.buildPrivacy(p);
 		JSONObject object = new JSONObject();
-		long postID = upe.createPost() ;
+		long postID = pb.savePost();
 		if(postID != -1)
 		{
 			object.put("postID", postID);

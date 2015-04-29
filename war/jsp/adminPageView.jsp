@@ -33,8 +33,8 @@
 			  		What have you been up to ?<br> <textarea rows="4" cols="40" name = "postContent"></textarea> <br>
 			  			</select>&nbsp;					  	
 		  			Privacy : <select name = "privacy">
-			  				<option value = "public">Public</option>
-			  				<option value = "private">Private</option>
+			  				<option value = "Public">Public</option>
+			  				<option value = "Private">Private</option>
 			  			</select>&nbsp;	
 			     <input type = "submit" value="post">
 				<h3>______________________________________________________</h3>			

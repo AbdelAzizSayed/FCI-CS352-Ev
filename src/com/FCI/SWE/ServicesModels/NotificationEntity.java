@@ -98,7 +98,52 @@ public class NotificationEntity
 					    	al.add(notification);								
 					    }
 					}			    			    	
-			    }		    	    
+			    }
+			    //notficatns for page likes 
+			    else if(((String)entity.getProperty("notiClass")).equals("DiscardPageLikeCommand"))
+			    {
+			    	notID = (String)entity.getProperty("notifID");//pageName in this case
+			    	String actionPerformerName = entity.getProperty("actionPerformer").toString();
+			    	Map notification = new HashMap();//this is to add a single notification to list
+			    	NotificationMessageOnPage = actionPerformerName + " liked your page : " + notID ;		
+			    	action = "discard";
+			    	href = "/social/notificationReaction/"+ notID + "/" + "DiscardPageLikeCommand" ;
+			       	notification.put("NotificationMessageOnPage", NotificationMessageOnPage);
+			    	notification.put("action", action);
+			    	notification.put("href", href);
+			    	al.add(notification);								
+			    }
+			    //notficatns for page likes 
+			    else if(((String)entity.getProperty("notiClass")).equals("DiscardPageLikeCommand"))
+			    {
+			    	notID = (String)entity.getProperty("notifID");//pageName in this case
+			    	String actionPerformerName = entity.getProperty("actionPerformer").toString();
+			    	Map notification = new HashMap();//this is to add a single notification to list
+			    	NotificationMessageOnPage = actionPerformerName + " liked your page : " + notID ;		
+			    	action = "discard";
+			    	href = "/social/notificationReaction/"+ notID + "/" + "DiscardPageLikeCommand" ;
+			       	notification.put("NotificationMessageOnPage", NotificationMessageOnPage);
+			    	notification.put("action", action);
+			    	notification.put("href", href);
+			    	al.add(notification);								
+			    }
+			    //notficatns for  post likes (page post or user post)			    
+			    else if(((String)entity.getProperty("notiClass")).equals("DiscardPostLikeCommand"))
+			    {
+			    	notID = (String)entity.getProperty("notifID");//postID in this case
+			    	String actionPerformerName = entity.getProperty("actionPerformer").toString();
+			    	Map notification = new HashMap();//this is to add a single notification to list
+			    	if(entity.getProperty("postType").toString().equals("page"))
+			    		NotificationMessageOnPage = actionPerformerName + " liked your page's Post : " + notID ;
+			    	else
+			    		NotificationMessageOnPage = actionPerformerName + " liked your post : " + notID ;
+			    	action = "discard";
+			    	href = "/social/notificationReaction/"+ notID + "/" + "DiscardPostLikeCommand" ;
+			       	notification.put("NotificationMessageOnPage", NotificationMessageOnPage);
+			    	notification.put("action", action);
+			    	notification.put("href", href);
+			    	al.add(notification);								
+			    }			    
 		    }		 
 		 }
 

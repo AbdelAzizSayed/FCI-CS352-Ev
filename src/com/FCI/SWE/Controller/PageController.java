@@ -35,7 +35,7 @@ public class PageController
 		String retJson = Connection.connect(
 				"http://localhost:8888/rest/pageList", "currentUserEmail="+currentUserEmail
 				,"POST", "application/x-www-form-urlencoded;charset=UTF-8");
-
+		System.out.println(retJson);
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
@@ -75,6 +75,8 @@ public class PageController
 				"http://localhost:8888/rest/createPage"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+		System.out.println(urlParameters);
+		System.out.println(retJson);
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
@@ -108,7 +110,8 @@ public class PageController
 				"http://localhost:8888/rest/likePage"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
-		
+		System.out.println(urlParameters);
+		System.out.println(retJson);
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {

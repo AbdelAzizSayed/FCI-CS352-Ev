@@ -31,9 +31,9 @@
 			<form action="/social/createPost" method="post">				
 			  		What's on your mind ?<br> <textarea rows="4" cols="40" name = "postContent"></textarea> <br>
 			  		Privacy : <select name = "privacy">
-			  				<option value = "public">Public</option>
-			  				<option value = "private">Private</option>
-			  				<option value = "custom">Custom</option>
+			  				<option value = "Public">Public</option>
+			  				<option value = "Private">Private</option>
+			  				<option value = "Custom">Custom</option>
 			  			</select>&nbsp;		
 			  			 Custom : <input type = "text" name = "custom">	<br>
 			  		Feelings : <select name = "feeling">

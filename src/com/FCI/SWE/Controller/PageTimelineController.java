@@ -35,7 +35,8 @@ public class PageTimelineController
 				"http://localhost:8888/rest/getPageTimelineAsAdmin"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
-		
+		System.out.println(urlParameters);
+		System.out.println(retJson);
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
@@ -66,6 +67,8 @@ public class PageTimelineController
 				"http://localhost:8888/rest/getPageTimeline"
 				, urlParameters,
 				"POST", "application/x-www-form-urlencoded;charset=UTF-8");
+		System.out.println(urlParameters);
+		System.out.println(retJson);		
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {

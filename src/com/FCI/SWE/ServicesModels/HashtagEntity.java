@@ -115,9 +115,9 @@ public class HashtagEntity
 						if(Long.toString(post.getKey().getId()).equals(postID))
 						{
 							if(post.getProperty("postType").toString().equals("user") &&
-								(post.getProperty("privacy").toString().equals("public") 
-						||(post.getProperty("privacy").toString().equals("private")&& fe.isFriend(post.getProperty("owner").toString(), currentEmail)
-							||(post.getProperty("privacy").toString().equals("custom")&& post.getProperty("custom").toString().contains(currentEmail)))))
+								(post.getProperty("privacy").toString().equals("Public") 
+						||(post.getProperty("privacy").toString().equals("Private")&& fe.isFriend(post.getProperty("owner").toString(), currentEmail)
+							||(post.getProperty("privacy").toString().equals("Custom")&& post.getProperty("Custom").toString().contains(currentEmail)))))
 							{
 								UserEntity ue = new UserEntity();
 								Map <String ,String>  hashPost = new HashMap();
@@ -155,8 +155,8 @@ public class HashtagEntity
 									}
 									break ;
 								}
-								if(post.getProperty("privacy").toString().equals("public") 
-										|| (post.getProperty("privacy").toString().equals("private") && pageLikers.contains(currentEmail)))
+								if(post.getProperty("privacy").toString().equals("Public") 
+										|| (post.getProperty("privacy").toString().equals("Private") && pageLikers.contains(currentEmail)))
 								{
 									UserEntity ue = new UserEntity();
 									Map <String ,String>  hashPost = new HashMap();

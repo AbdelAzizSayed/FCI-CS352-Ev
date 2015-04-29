@@ -20,12 +20,13 @@ public class PageServices {
 	
 	@POST
 	@Path("/createPage")
-	public String createPage(@FormParam("currentEmail") String currentEmail, @FormParam("pageName") String pageName,
+	public String createPage(@FormParam("currentUserEmail") String currentUserEmail, @FormParam("pageName") String pageName,
 			@FormParam("pageType") String pageType, 
 			@FormParam("pageCategory") String pageCategory) {
 		
 		JSONObject object = new JSONObject();		
-		PageEntity page = new PageEntity(pageName, pageType, pageCategory, currentEmail);
+		System.out.println("email " + currentUserEmail);
+		PageEntity page = new PageEntity(pageName, pageType, pageCategory, currentUserEmail);
 		
 		JSONObject json = new JSONObject();
 		if(page.createPage())

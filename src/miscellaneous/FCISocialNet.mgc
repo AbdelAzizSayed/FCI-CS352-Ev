@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ClassDiagram>
+    <Class name="com.FCI.SWE.ServicesModels.FriendshipEntity" x="-81" y="248">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.PostEntity" x="606" y="589">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.Privacy"
+            endpointName="privacy" kind="Simple"/>
+    </Class>
+    <Class name="com.FCI.SWE.NotifCommand.NotifCommnad" x="-128" y="21">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.PostBuilder" x="626" y="26">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="true"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="true"
+            accessors-accepted="true" constructors-accepted="true"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.PagePostEntity" x="471" y="458">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.PostEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.MessageEntity" x="-258" y="222">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.FCI.SWE.NotifCommand.AcceptFriendCommand" x="-64" y="132">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.NotifCommand.NotifCommnad"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.FriendshipEntity"
+            endpointName="fe" kind="Simple"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.FriendshipEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.Custom" x="556" y="748">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="true" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="true"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.Privacy"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.UserPostBuilder" x="759" y="255">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.PostBuilder"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.UserPostEntity"
+            endpointName="post" kind="Simple"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.PostEntity"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.UserPostEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.NotifCommand.ReadMessageCommand" x="-256" y="110">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.NotifCommand.NotifCommnad"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.MessageEntity"
+            endpointName="me" kind="Simple"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.MessageEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.NotifCommand.ReadGroupMessageCommand"
+        x="144" y="100">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.NotifCommand.NotifCommnad"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.GroupMessageEntity"
+            endpointName="me" kind="Simple"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.GroupMessageEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.UserPostEntity" x="810" y="416">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.PostEntity"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.FriendshipEntity"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.Public" x="462" y="764">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="true" constructors-accepted="true"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.Privacy"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.GroupMessageEntity" x="179" y="192">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.Privacy" x="356" y="588">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.Private" x="309" y="740">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="true"
+            accessors-accepted="true" constructors-accepted="true"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.Privacy"/>
+    </Class>
+    <Class name="com.FCI.SWE.ServicesModels.PagePostBuilder" x="523" y="239">
+        <AttributesDisplayFilter public-accepted="true"
+            private-accepted="true" protected-accepted="true"
+            default-accepted="true" static-accepted="false"/>
+        <MethodDisplayFilter public-accepted="true"
+            private-accepted="false" protected-accepted="false"
+            default-accepted="false" static-accepted="false"
+            accessors-accepted="false" constructors-accepted="false"/>
+        <Extension destinationClassName="com.FCI.SWE.ServicesModels.PostBuilder"/>
+        <Association
+            destinationClassName="com.FCI.SWE.ServicesModels.PagePostEntity"
+            endpointName="post" kind="Simple"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.PostEntity"/>
+        <Communication destinationClassName="com.FCI.SWE.ServicesModels.PagePostEntity"/>
+    </Class>
+</ClassDiagram>

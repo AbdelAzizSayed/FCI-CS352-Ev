@@ -35,7 +35,9 @@ public class UserTimelineController
 		String serviceUrl = "http://localhost:8888/rest/timelinePage";
 		String urlParameters = "currentEmail=" + currentEmail ;
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
-						"application/x-www-form-urlencoded;charset=UTF-8");	
+						"application/x-www-form-urlencoded;charset=UTF-8");
+		System.out.println(urlParameters);
+		System.out.println(retJson);		
 		JSONParser parser = new JSONParser();
 		Object obj;
 		try {
@@ -63,6 +65,8 @@ public class UserTimelineController
 		String retJson = Connection.connect(serviceUrl, urlParameters, "POST",
 						"application/x-www-form-urlencoded;charset=UTF-8");	
 		JSONParser parser = new JSONParser();
+		System.out.println(urlParameters);
+		System.out.println(retJson);				
 		Object obj;
 		try {
 			obj = parser.parse(retJson);

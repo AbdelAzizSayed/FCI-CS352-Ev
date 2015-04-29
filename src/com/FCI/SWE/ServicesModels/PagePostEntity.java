@@ -12,30 +12,17 @@ import com.google.appengine.api.datastore.Query;
 
 public class PagePostEntity extends PostEntity
 {
-	private String pageName ;
 	private int nOfSeen ;
 	private String seeners ;
 	
-	public PagePostEntity(String pageName, String postContent , String privacy , boolean isShare) 
+	public PagePostEntity() {}
+	public long savePost() 
 	{
-		this.pageName= pageName ;
-		this.postContent = postContent ;
-		this.isShare = isShare ;
-		this.privacy = privacy ;
-	}
-
-	public PagePostEntity() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public long createPost() 
-	{
-		postType = "page" ;
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService(); 
 		Entity post = new Entity("posts");
-		post.setProperty("owner", pageName );//who added the post
+		post.setProperty("owner", postOwner );//who added the post
 		post.setProperty("postContent", postContent );
-		post.setProperty("privacy", privacy );		
+		post.setProperty("privacy", privacy.getPrivacy() );		
 		post.setProperty("likes", 0);	
 		post.setProperty("likers", "");//who liked the post
 		post.setProperty("nOfSeen", 0);	
@@ -63,7 +50,7 @@ public class PagePostEntity extends PostEntity
 			{
 				gaeQuery = new Query ("pages");
 				pq = datastore.prepare(gaeQuery);
-				String pageLikers = "";//for private post privacy
+				String pageLikers = "";//for Private post privacy
 				for(Entity e2: pq.asIterable())
 				{
 					if(e2.getProperty("pageName").toString().equals(pageName) )
@@ -72,8 +59,8 @@ public class PagePostEntity extends PostEntity
 					}
 					break ;
 				}
-				if(e.getProperty("privacy").toString().equals("public") 
-						|| (e.getProperty("privacy").toString().equals("private") && pageLikers.contains(currentEmail)))
+				if(e.getProperty("privacy").toString().equals("Public") 
+						|| (e.getProperty("privacy").toString().equals("Private") && pageLikers.contains(currentEmail)))
 				{
 					if(!e.getProperty("seeners").toString().contains(currentEmail))
 					{
@@ -97,7 +84,6 @@ public class PagePostEntity extends PostEntity
 		}
 		return al ;			
 	}
-	
 	public ArrayList<Map> getPageTimelineAsAdmin(String pageName) 
 	{
 		ArrayList<Map> al = new ArrayList<Map>() ;
